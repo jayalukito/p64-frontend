@@ -32,9 +32,3 @@ Thumbs.db
 
 expo-env.d.ts
 
-#environment variables
-.env.*
-
-#firebase
-p64-surakshasms-firebase-adminsdk-fbsvc-b251ec8c62
-**/firebase-service-account.json
