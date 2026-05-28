@@ -1,84 +1,117 @@
 import { Link } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 export default function LoginScreen() {
   return (
-    <View style={styles.container}>
-      <View style={styles.dots}>
-        <View style={styles.dot} />
-        <View style={styles.dot} />
-        <View style={styles.activeDot} />
-      </View>
+    <View style={styles.screen}>
+      <LinearGradient
+        colors={['#03091F', '#071640', '#081A4C', '#06143A', '#020817']}
+        locations={[0, 0.22, 0.48, 0.75, 1]}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+        style={styles.container}
+      >
+        <LinearGradient
+          colors={[
+            'rgba(113, 76, 255, 0)',
+            'rgba(113, 76, 255, 0.12)',
+            'rgba(74, 118, 255, 0.10)',
+            'rgba(113, 76, 255, 0)',
+          ]}
+          locations={[0, 0.35, 0.62, 1]}
+          start={{ x: 0.2, y: 0 }}
+          end={{ x: 0.8, y: 1 }}
+          style={styles.softShine}
+        />
 
-      <View style={styles.logoBox}>
-        <Text style={styles.logo}>♢</Text>
-      </View>
+        <LinearGradient
+          colors={[
+            'rgba(255,255,255,0.04)',
+            'rgba(255,255,255,0)',
+          ]}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+          style={styles.topSheen}
+        />
 
-      <Text style={styles.title}>Suraksha SMS</Text>
-      <Text style={styles.badge}>Protecting you from SMS scams</Text>
+        <View style={styles.logoBox}>
+          <Text style={styles.logo}>♢</Text>
+        </View>
 
-      <Link href="/onboarding" asChild>
-        <TouchableOpacity style={styles.primaryButton}>
-          <Text style={styles.primaryText}>Log In</Text>
-          <Text style={styles.arrow}>→</Text>
+        <Text style={styles.title}>Suraksha SMS</Text>
+        <Text style={styles.badge}>Protecting you from SMS scams</Text>
+
+        <Link href="/onboarding" asChild>
+          <TouchableOpacity style={styles.primaryButton}>
+            <Text style={styles.primaryText}>Log In</Text>
+            <Text style={styles.arrow}>→</Text>
+          </TouchableOpacity>
+        </Link>
+
+        <Link href="/onboarding" asChild>
+          <TouchableOpacity style={styles.secondaryButton}>
+            <Text style={styles.secondaryText}>♙  Create Account</Text>
+          </TouchableOpacity>
+        </Link>
+
+        <View style={styles.dividerRow}>
+          <View style={styles.line} />
+          <Text style={styles.dividerText}>or continue with</Text>
+          <View style={styles.line} />
+        </View>
+
+        <TouchableOpacity style={styles.socialButton}>
+          <Text style={styles.google}>G</Text>
+          <Text style={styles.socialText}>Continue with Google</Text>
         </TouchableOpacity>
-      </Link>
 
-      <Link href="/onboarding" asChild>
-        <TouchableOpacity style={styles.secondaryButton}>
-          <Text style={styles.secondaryText}>♙  Create Account</Text>
+        <TouchableOpacity style={styles.socialButton}>
+          <Text style={styles.apple}></Text>
+          <Text style={styles.socialText}>Continue with Apple</Text>
         </TouchableOpacity>
-      </Link>
 
-      <View style={styles.dividerRow}>
-        <View style={styles.line} />
-        <Text style={styles.dividerText}>or continue with</Text>
-        <View style={styles.line} />
-      </View>
+        <Text style={styles.terms}>
+          By continuing, you agree to our{'\n'}Terms of Use and Privacy Policy.
+        </Text>
 
-      <TouchableOpacity style={styles.socialButton}>
-        <Text style={styles.google}>G</Text>
-        <Text style={styles.socialText}>Continue with Google</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.socialButton}>
-        <Text style={styles.apple}></Text>
-        <Text style={styles.socialText}>Continue with Apple</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.terms}>
-        By continuing, you agree to our{'\n'}Terms of Use and Privacy Policy.
-      </Text>
-
-      <Text style={styles.privacy}>♙  Your privacy is our priority</Text>
+        <Text style={styles.privacy}>♙  Your privacy is our priority</Text>
+      </LinearGradient>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    backgroundColor: '#061642',
+    backgroundColor: '#1E1E1E',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  container: {
+    width: '100%',
+    maxWidth: 390,
+    minHeight: 844,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 28,
+    paddingVertical: 40,
+    overflow: 'hidden',
   },
-  dots: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 42,
+  softShine: {
+    position: 'absolute',
+    top: -50,
+    left: -50,
+    width: 490,
+    height: 980,
+    opacity: 1,
+    transform: [{ rotate: '8deg' }],
   },
-  dot: {
-    width: 26,
-    height: 5,
-    borderRadius: 10,
-    backgroundColor: '#26375F',
-  },
-  activeDot: {
-    width: 26,
-    height: 5,
-    borderRadius: 10,
-    backgroundColor: '#7C3AED',
+  topSheen: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    height: 260,
   },
   logoBox: {
     width: 76,
@@ -88,6 +121,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 22,
+    shadowColor: '#7C3AED',
+    shadowOpacity: 0.45,
+    shadowRadius: 28,
   },
   logo: {
     color: 'white',
@@ -111,7 +147,7 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     width: '100%',
-    height: 54,
+    height: 56,
     borderRadius: 14,
     backgroundColor: '#7C3AED',
     flexDirection: 'row',
@@ -131,7 +167,7 @@ const styles = StyleSheet.create({
   },
   secondaryButton: {
     width: '100%',
-    height: 54,
+    height: 56,
     borderRadius: 14,
     backgroundColor: '#111F44',
     alignItems: 'center',
@@ -163,7 +199,7 @@ const styles = StyleSheet.create({
   },
   socialButton: {
     width: '100%',
-    height: 52,
+    height: 56,
     borderRadius: 14,
     backgroundColor: '#111F44',
     borderWidth: 1,
