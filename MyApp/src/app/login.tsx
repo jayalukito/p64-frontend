@@ -11,35 +11,46 @@ export default function LoginScreen() {
       </View>
 
       <View style={styles.logoBox}>
-        <Text style={styles.logo}>🛡️</Text>
+        <Text style={styles.logo}>♢</Text>
       </View>
 
       <Text style={styles.title}>Suraksha SMS</Text>
       <Text style={styles.badge}>Protecting you from SMS scams</Text>
 
-      <Link href={{ pathname: "/onboarding" }} asChild>
+      <Link href="/onboarding" asChild>
         <TouchableOpacity style={styles.primaryButton}>
-          <Text style={styles.primaryText}>Log In →</Text>
+          <Text style={styles.primaryText}>Log In</Text>
+          <Text style={styles.arrow}>→</Text>
         </TouchableOpacity>
       </Link>
 
-      <Link href={{ pathname: "/onboarding" }} asChild>
+      <Link href="/onboarding" asChild>
         <TouchableOpacity style={styles.secondaryButton}>
-          <Text style={styles.secondaryText}>Create Account</Text>
+          <Text style={styles.secondaryText}>♙  Create Account</Text>
         </TouchableOpacity>
       </Link>
 
-      <Text style={styles.divider}>or continue with</Text>
+      <View style={styles.dividerRow}>
+        <View style={styles.line} />
+        <Text style={styles.dividerText}>or continue with</Text>
+        <View style={styles.line} />
+      </View>
 
       <TouchableOpacity style={styles.socialButton}>
-        <Text style={styles.secondaryText}>Continue with Google</Text>
+        <Text style={styles.google}>G</Text>
+        <Text style={styles.socialText}>Continue with Google</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.socialButton}>
-        <Text style={styles.secondaryText}>Continue with Apple</Text>
+        <Text style={styles.apple}></Text>
+        <Text style={styles.socialText}>Continue with Apple</Text>
       </TouchableOpacity>
 
-      <Text style={styles.footer}>Your privacy is our priority</Text>
+      <Text style={styles.terms}>
+        By continuing, you agree to our{'\n'}Terms of Use and Privacy Policy.
+      </Text>
+
+      <Text style={styles.privacy}>♙  Your privacy is our priority</Text>
     </View>
   );
 }
@@ -47,98 +58,146 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#06143A',
+    backgroundColor: '#061642',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 28,
+    paddingHorizontal: 28,
   },
   dots: {
     flexDirection: 'row',
     gap: 8,
-    marginBottom: 32,
+    marginBottom: 42,
   },
   dot: {
-    width: 28,
+    width: 26,
     height: 5,
     borderRadius: 10,
-    backgroundColor: '#1F315F',
+    backgroundColor: '#26375F',
   },
   activeDot: {
-    width: 28,
+    width: 26,
     height: 5,
     borderRadius: 10,
     backgroundColor: '#7C3AED',
   },
   logoBox: {
-    width: 92,
-    height: 92,
-    borderRadius: 24,
+    width: 76,
+    height: 76,
+    borderRadius: 22,
     backgroundColor: '#7447F5',
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 22,
   },
   logo: {
+    color: 'white',
     fontSize: 38,
+    fontWeight: '800',
   },
   title: {
     color: 'white',
-    fontSize: 32,
-    fontWeight: '800',
-    marginBottom: 10,
+    fontSize: 30,
+    fontWeight: '900',
+    marginBottom: 12,
   },
   badge: {
-    color: '#9EA9CC',
-    backgroundColor: '#101E45',
-    paddingHorizontal: 18,
-    paddingVertical: 8,
+    color: '#8D98BD',
+    backgroundColor: '#13224C',
     borderRadius: 20,
-    marginBottom: 42,
+    paddingHorizontal: 16,
+    paddingVertical: 7,
+    fontSize: 12,
+    marginBottom: 36,
   },
   primaryButton: {
     width: '100%',
+    height: 54,
+    borderRadius: 14,
     backgroundColor: '#7C3AED',
-    paddingVertical: 18,
-    borderRadius: 16,
+    flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 14,
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    marginBottom: 12,
   },
   primaryText: {
     color: 'white',
     fontWeight: '800',
-    fontSize: 16,
+    fontSize: 14,
+  },
+  arrow: {
+    color: 'white',
+    fontSize: 24,
   },
   secondaryButton: {
     width: '100%',
+    height: 54,
+    borderRadius: 14,
     backgroundColor: '#111F44',
-    paddingVertical: 18,
-    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#20335F',
+    marginBottom: 20,
+  },
+  secondaryText: {
+    color: '#DCE4FF',
+    fontWeight: '700',
+    fontSize: 13,
+  },
+  dividerRow: {
+    width: '100%',
+    flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 18,
-    borderWidth: 1,
-    borderColor: '#1F315F',
+  },
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#20335F',
+  },
+  dividerText: {
+    color: '#52618A',
+    fontSize: 12,
+    marginHorizontal: 12,
   },
   socialButton: {
     width: '100%',
+    height: 52,
+    borderRadius: 14,
     backgroundColor: '#111F44',
-    paddingVertical: 17,
-    borderRadius: 16,
-    alignItems: 'center',
-    marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#1F315F',
+    borderColor: '#20335F',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 12,
   },
-  secondaryText: {
+  google: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '900',
+  },
+  apple: {
+    color: 'white',
+    fontSize: 20,
+  },
+  socialText: {
     color: 'white',
     fontWeight: '700',
-  },
-  divider: {
-    color: '#526188',
-    marginBottom: 14,
-  },
-  footer: {
-    color: '#7F8BC0',
-    marginTop: 16,
     fontSize: 13,
+  },
+  terms: {
+    color: '#56658E',
+    textAlign: 'center',
+    fontSize: 11,
+    lineHeight: 17,
+    marginTop: 10,
+  },
+  privacy: {
+    color: '#8A63FF',
+    fontSize: 12,
+    marginTop: 12,
   },
 });

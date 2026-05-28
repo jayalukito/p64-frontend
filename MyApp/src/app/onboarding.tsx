@@ -1,3 +1,4 @@
+import { Link } from 'expo-router';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 export default function OnboardingScreen() {
@@ -21,9 +22,11 @@ export default function OnboardingScreen() {
         Our smart AI scans and detects suspicious messages in real-time, keeping you one step ahead of SMS scams.
       </Text>
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Next →</Text>
-      </TouchableOpacity>
+      <Link href={{ pathname: "/privacy" as any }} asChild>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Next →</Text>
+        </TouchableOpacity>
+      </Link>
 
       <Text style={styles.skip}>Skip for now</Text>
     </View>
