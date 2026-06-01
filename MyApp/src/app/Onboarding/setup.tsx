@@ -1,6 +1,12 @@
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 
 export default function SetupScreen() {
   return (
@@ -10,58 +16,68 @@ export default function SetupScreen() {
         locations={[0, 0.22, 0.48, 0.75, 1]}
         style={styles.container}
       >
-        <View style={styles.visualWrap}>
-          <View style={styles.ringLarge} />
-          <View style={styles.ringMedium} />
-          <View style={styles.ringSmall} />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          <View style={styles.content}>
+            <View style={styles.visualWrap}>
+              <View style={styles.ringLarge} />
+              <View style={styles.ringMedium} />
+              <View style={styles.ringSmall} />
 
-          <View style={styles.scanningBadge}>
-            <Text style={styles.scanningText}>AI Calibrating</Text>
+              <View style={styles.scanningBadge}>
+                <Text style={styles.scanningText}>AI Calibrating</Text>
+              </View>
+
+              <View style={styles.logoGlow}>
+                <LinearGradient colors={['#A78BFA', '#7C3AED']} style={styles.logoBox}>
+                  <Text style={styles.logo}>♢</Text>
+                </LinearGradient>
+              </View>
+
+              <View style={styles.progressOuter}>
+                <View style={styles.progressInner} />
+              </View>
+            </View>
+
+            <Text style={styles.pill}>SETTING UP PROTECTION</Text>
+
+            <Text style={styles.title}>Preparing Suraksha SMS</Text>
+
+            <Text style={styles.subtitle}>
+              We’re setting up your on-device AI protection so suspicious SMS messages can be
+              detected in real time.
+            </Text>
+
+            <View style={styles.statusCard}>
+              <StatusRow status="complete" title="Privacy settings secured" />
+              <View style={styles.divider} />
+
+              <StatusRow status="complete" title="On-device scan mode enabled" />
+              <View style={styles.divider} />
+
+              <StatusRow status="loading" title="Calibrating threat detection model" />
+              <View style={styles.divider} />
+
+              <StatusRow status="pending" title="Preparing real-time alerts" />
+            </View>
+
+            <View style={styles.footer}>
+              <TouchableOpacity
+                style={styles.primaryButton}
+                onPress={() => router.push('/Onboarding/home')}
+              >
+                <Text style={styles.primaryText}>Continue to Dashboard</Text>
+                <Text style={styles.arrow}>→</Text>
+              </TouchableOpacity>
+
+              <Text style={styles.helperText}>
+                Your messages stay private and are processed only on this device.
+              </Text>
+            </View>
           </View>
-
-          <View style={styles.logoGlow}>
-            <LinearGradient colors={['#A78BFA', '#7C3AED']} style={styles.logoBox}>
-              <Text style={styles.logo}>♢</Text>
-            </LinearGradient>
-          </View>
-
-          <View style={styles.progressOuter}>
-            <View style={styles.progressInner} />
-          </View>
-        </View>
-
-        <Text style={styles.pill}>SETTING UP PROTECTION</Text>
-
-        <Text style={styles.title}>Preparing Suraksha SMS</Text>
-
-        <Text style={styles.subtitle}>
-          We’re setting up your on-device AI protection so suspicious SMS messages can be
-          detected in real time.
-        </Text>
-
-        <View style={styles.statusCard}>
-          <StatusRow status="complete" title="Privacy settings secured" />
-          <View style={styles.divider} />
-          <StatusRow status="complete" title="On-device scan mode enabled" />
-          <View style={styles.divider} />
-          <StatusRow status="loading" title="Calibrating threat detection model" />
-          <View style={styles.divider} />
-          <StatusRow status="pending" title="Preparing real-time alerts" />
-        </View>
-
-        <View style={styles.footer}>
-          <TouchableOpacity
-            style={styles.primaryButton}
-            onPress={() => router.push('/Onboarding/login')}
-          >
-            <Text style={styles.primaryText}>Continue to Dashboard</Text>
-            <Text style={styles.arrow}>→</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.helperText}>
-            Your messages stay private and are processed only on this device.
-          </Text>
-        </View>
+        </ScrollView>
       </LinearGradient>
     </View>
   );
@@ -124,6 +140,13 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     maxWidth: 390,
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  content: {
+    flex: 1,
     minHeight: 844,
     alignItems: 'center',
     paddingHorizontal: 28,
@@ -311,6 +334,7 @@ const styles = StyleSheet.create({
   footer: {
     width: '100%',
     marginTop: 'auto',
+    paddingTop: 28,
   },
   primaryButton: {
     width: '100%',

@@ -1,6 +1,12 @@
 import { Link } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 
 export default function PrivacyScreen() {
   return (
@@ -10,74 +16,85 @@ export default function PrivacyScreen() {
         locations={[0, 0.22, 0.48, 0.75, 1]}
         style={styles.container}
       >
-        <View style={styles.progress}>
-          <View style={styles.dot} />
-          <View style={styles.dotActive} />
-          <View style={styles.dot} />
-        </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          <View style={styles.content}>
+            <View style={styles.progress}>
+              <View style={styles.dot} />
+              <View style={styles.dotActive} />
+              <View style={styles.dot} />
+            </View>
 
-        <View style={styles.visualWrap}>
-          <View style={styles.ringLarge} />
-          <View style={styles.ringMedium} />
-          <View style={styles.ringSmall} />
+            <View style={styles.visualWrap}>
+              <View style={styles.ringLarge} />
+              <View style={styles.ringMedium} />
+              <View style={styles.ringSmall} />
 
-          <View style={styles.encryptedBadge}>
-            <Text style={styles.badgeText}>▣ Encrypted</Text>
+              <View style={styles.encryptedBadge}>
+                <Text style={styles.badgeText}>▣ Encrypted</Text>
+              </View>
+
+              <View style={styles.deviceBadge}>
+                <Text style={styles.badgeText}>▯ On-Device</Text>
+              </View>
+
+              <View style={styles.uploadBadge}>
+                <Text style={styles.uploadText}>⌁ No Uploads</Text>
+              </View>
+
+              <View style={styles.shadowBase} />
+
+              <LinearGradient colors={['#A78BFA', '#7C3AED']} style={styles.lockBody}>
+                <View style={styles.lockShackle} />
+                <View style={styles.keyholeCircle} />
+                <View style={styles.keyholeStem} />
+              </LinearGradient>
+            </View>
+
+            <Text style={styles.pill}>PRIVACY FIRST</Text>
+
+            <Text style={styles.title}>Your Privacy Matters</Text>
+
+            <Text style={styles.subtitle}>
+              All message analysis happens on your device.{'\n'}
+              Your data never leaves your phone.
+            </Text>
+
+            <View style={styles.list}>
+              <View style={styles.listItem}>
+                <Text style={styles.check}>✓</Text>
+                <Text style={styles.listText}>Zero data collection</Text>
+              </View>
+
+              <View style={styles.listItem}>
+                <Text style={styles.check}>✓</Text>
+                <Text style={styles.listText}>Works fully offline</Text>
+              </View>
+
+              <View style={styles.listItem}>
+                <Text style={styles.check}>✓</Text>
+                <Text style={styles.listText}>No third-party sharing</Text>
+              </View>
+            </View>
+
+            <View style={styles.footer}>
+              <Link href="/Onboarding/create-account" asChild>
+                <TouchableOpacity style={styles.button}>
+                  <Text style={styles.buttonText}>Next</Text>
+                  <Text style={styles.arrow}>→</Text>
+                </TouchableOpacity>
+              </Link>
+
+              <Link href="/Onboarding/create-account" asChild>
+                <TouchableOpacity>
+                  <Text style={styles.skip}>Skip for now</Text>
+                </TouchableOpacity>
+              </Link>
+            </View>
           </View>
-
-          <View style={styles.deviceBadge}>
-            <Text style={styles.badgeText}>▯ On-Device</Text>
-          </View>
-
-          <View style={styles.uploadBadge}>
-            <Text style={styles.uploadText}>⌁ No Uploads</Text>
-          </View>
-
-          <View style={styles.shadowBase} />
-
-          <LinearGradient colors={['#A78BFA', '#7C3AED']} style={styles.lockBody}>
-            <View style={styles.lockShackle} />
-            <View style={styles.keyholeCircle} />
-            <View style={styles.keyholeStem} />
-          </LinearGradient>
-        </View>
-
-        <Text style={styles.pill}>PRIVACY FIRST</Text>
-
-        <Text style={styles.title}>Your Privacy Matters</Text>
-
-        <Text style={styles.subtitle}>
-          All message analysis happens on your device.{'\n'}
-          Your data never leaves your phone.
-        </Text>
-
-        <View style={styles.list}>
-          <View style={styles.listItem}>
-            <Text style={styles.check}>✓</Text>
-            <Text style={styles.listText}>Zero data collection</Text>
-          </View>
-
-          <View style={styles.listItem}>
-            <Text style={styles.check}>✓</Text>
-            <Text style={styles.listText}>Works fully offline</Text>
-          </View>
-
-          <View style={styles.listItem}>
-            <Text style={styles.check}>✓</Text>
-            <Text style={styles.listText}>No third-party sharing</Text>
-          </View>
-        </View>
-
-        <View style={styles.footer}>
-          <Link href="/Onboarding/create-account" asChild>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Next</Text>
-              <Text style={styles.arrow}>→</Text>
-            </TouchableOpacity>
-          </Link>
-
-          <Text style={styles.skip}>Skip for now</Text>
-        </View>
+        </ScrollView>
       </LinearGradient>
     </View>
   );
@@ -93,6 +110,13 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     maxWidth: 390,
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  content: {
+    flex: 1,
     minHeight: 844,
     alignItems: 'center',
     paddingHorizontal: 28,
@@ -286,6 +310,7 @@ const styles = StyleSheet.create({
   footer: {
     width: '100%',
     marginTop: 'auto',
+    paddingTop: 34,
   },
   button: {
     backgroundColor: '#7C3AED',

@@ -17,22 +17,18 @@ export default function LoginScreen() {
         <Text style={styles.title}>Suraksha SMS</Text>
         <Text style={styles.badge}>Protecting you from SMS scams</Text>
 
-        <Link href="/Onboarding/onboarding" asChild>
+        <Link href="/Onboarding/sign-in" asChild>
           <TouchableOpacity style={styles.primaryButton}>
             <Text style={styles.primaryText}>Log In</Text>
             <Text style={styles.arrow}>→</Text>
           </TouchableOpacity>
         </Link>
 
-        <TouchableOpacity style={styles.secondaryButton}>
-          <Text style={styles.secondaryText}>♙  Create Account</Text>
-        </TouchableOpacity>
-
-        <View style={styles.dividerRow}>
-          <View style={styles.line} />
-          <Text style={styles.dividerText}>or continue with</Text>
-          <View style={styles.line} />
-        </View>
+        <Link href="/Onboarding/onboarding" asChild>
+          <TouchableOpacity style={styles.secondaryButton}>
+            <Text style={styles.secondaryText}>♙  Create Account</Text>
+          </TouchableOpacity>
+        </Link>
 
         <TouchableOpacity style={styles.socialButton}>
           <Text style={styles.google}>G</Text>

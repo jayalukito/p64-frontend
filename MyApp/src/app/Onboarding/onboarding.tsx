@@ -1,6 +1,12 @@
 import { Link } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 
 export default function OnboardingScreen() {
   return (
@@ -10,61 +16,66 @@ export default function OnboardingScreen() {
         locations={[0, 0.22, 0.48, 0.75, 1]}
         style={styles.container}
       >
-        <View style={styles.progress}>
-          <View style={styles.dotActive} />
-          <View style={styles.dot} />
-          <View style={styles.dot} />
-        </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          <View style={styles.content}>
+            <View style={styles.progress}>
+              <View style={styles.dotActive} />
+              <View style={styles.dot} />
+              <View style={styles.dot} />
+            </View>
 
-        <View style={styles.visualWrap}>
-          <View style={styles.ringLarge} />
-          <View style={styles.ringMedium} />
-          <View style={styles.ringSmall} />
+            <View style={styles.visualWrap}>
+              <View style={styles.ringLarge} />
+              <View style={styles.ringMedium} />
+              <View style={styles.ringSmall} />
 
-          <View style={styles.aiBadge}>
-            <Text style={styles.aiText}>⌘ AI Bot</Text>
+              <View style={styles.aiBadge}>
+                <Text style={styles.aiText}>⌘ AI Bot</Text>
+              </View>
+
+              <View style={styles.sideBubbleLeft}>
+                <Text style={styles.sideIcon}>⌕</Text>
+              </View>
+
+              <View style={styles.sideBubbleRight}>
+                <Text style={styles.greenIcon}>♧</Text>
+              </View>
+
+              <View style={styles.shadowBase} />
+
+              <LinearGradient colors={['#8B5CF6', '#6D28D9']} style={styles.shield}>
+                <Text style={styles.check}>✓</Text>
+              </LinearGradient>
+            </View>
+
+            <Text style={styles.pill}>AI POWERED</Text>
+
+            <Text style={styles.title}>AI-Powered Protection</Text>
+
+            <Text style={styles.subtitle}>
+              Our smart AI scans and detects suspicious messages in real-time, keeping you one
+              step ahead of SMS scams.
+            </Text>
+
+            <View style={styles.footer}>
+              <Link href="/Onboarding/privacy" asChild>
+                <TouchableOpacity style={styles.button}>
+                  <Text style={styles.buttonText}>Next</Text>
+                  <Text style={styles.arrow}>→</Text>
+                </TouchableOpacity>
+              </Link>
+
+              <Link href="/Onboarding/create-account" asChild>
+                <TouchableOpacity>
+                  <Text style={styles.skip}>Skip for now</Text>
+                </TouchableOpacity>
+              </Link>
+            </View>
           </View>
-
-          <View style={styles.sideBubbleLeft}>
-            <Text style={styles.sideIcon}>⌕</Text>
-          </View>
-
-          <View style={styles.sideBubbleRight}>
-            <Text style={styles.greenIcon}>♧</Text>
-          </View>
-
-          <View style={styles.shadowBase} />
-
-          <LinearGradient colors={['#8B5CF6', '#6D28D9']} style={styles.shield}>
-            <Text style={styles.check}>✓</Text>
-          </LinearGradient>
-        </View>
-
-        <Text style={styles.pill}>AI POWERED</Text>
-
-        <Text style={styles.title}>AI-Powered Protection</Text>
-
-        <Text style={styles.subtitle}>
-          Our smart AI scans and detects suspicious messages in real-time, keeping you one
-          step ahead of SMS scams.
-        </Text>
-
-        <View style={styles.bottomDots}>
-          <View style={styles.smallDotActive} />
-          <View style={styles.smallDot} />
-          <View style={styles.smallDot} />
-        </View>
-
-        <View style={styles.footer}>
-          <Link href="/Onboarding/privacy" asChild>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Next</Text>
-              <Text style={styles.arrow}>→</Text>
-            </TouchableOpacity>
-          </Link>
-
-          <Text style={styles.skip}>Skip for now</Text>
-        </View>
+        </ScrollView>
       </LinearGradient>
     </View>
   );
@@ -80,6 +91,13 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     maxWidth: 390,
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  content: {
+    flex: 1,
     minHeight: 844,
     alignItems: 'center',
     paddingHorizontal: 28,

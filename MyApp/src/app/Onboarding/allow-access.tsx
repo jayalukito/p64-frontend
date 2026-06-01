@@ -1,6 +1,12 @@
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 
 export default function AllowAccessScreen() {
   const handleAllowAccess = () => {
@@ -14,59 +20,68 @@ export default function AllowAccessScreen() {
         locations={[0, 0.22, 0.48, 0.75, 1]}
         style={styles.container}
       >
-        <View style={styles.logoGlow}>
-          <View style={styles.logoCircle}>
-            <Text style={styles.logo}>♢</Text>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          <View style={styles.content}>
+            <View style={styles.logoGlow}>
+              <View style={styles.logoCircle}>
+                <Text style={styles.logo}>♢</Text>
+              </View>
+            </View>
+
+            <Text style={styles.title}>Allow Access</Text>
+
+            <Text style={styles.subtitle}>
+              To protect you from scam messages,{'\n'}
+              we need the following permissions.
+            </Text>
+
+            <View style={styles.permissionCard}>
+              <PermissionRow
+                icon="▱"
+                title="SMS Access"
+                description="Read incoming SMS for scam detection"
+              />
+
+              <View style={styles.divider} />
+
+              <PermissionRow
+                icon="♧"
+                title="Alerts"
+                description="Show real-time scam alerts"
+              />
+
+              <View style={styles.divider} />
+
+              <PermissionRow
+                icon="⌁"
+                title="Background Activity"
+                description="Monitor messages in the background"
+              />
+
+              <View style={styles.divider} />
+
+              <PermissionRow
+                icon="◇"
+                title="Data Safety"
+                description="Keep your data secure on your device"
+              />
+            </View>
+
+            <View style={styles.footer}>
+              <TouchableOpacity style={styles.primaryButton} onPress={handleAllowAccess}>
+                <Text style={styles.buttonIcon}>♢</Text>
+                <Text style={styles.primaryText}>Allow Access</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => router.push('/Onboarding/setup')}>
+                <Text style={styles.notNow}>Not Now</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-
-        <Text style={styles.title}>Allow Access</Text>
-
-        <Text style={styles.subtitle}>
-          To protect you from scam messages,{'\n'}
-          we need the following permissions.
-        </Text>
-
-        <View style={styles.permissionCard}>
-          <PermissionRow
-            icon="▱"
-            title="SMS Access"
-            description="Read incoming SMS for scam detection"
-          />
-
-          <View style={styles.divider} />
-
-          <PermissionRow
-            icon="♧"
-            title="Alerts"
-            description="Show real-time scam alerts"
-          />
-
-          <View style={styles.divider} />
-
-          <PermissionRow
-            icon="⌁"
-            title="Background Activity"
-            description="Monitor messages in the background"
-          />
-
-          <View style={styles.divider} />
-
-          <PermissionRow
-            icon="◇"
-            title="Data Safety"
-            description="Keep your data secure on your device"
-          />
-        </View>
-
-        <TouchableOpacity style={styles.primaryButton} onPress={handleAllowAccess}>
-          <Text style={styles.buttonIcon}>♢</Text>
-          <Text style={styles.primaryText}>Allow Access</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => router.push('/Onboarding/setup')}>
-          <Text style={styles.notNow}>Not Now</Text>
-        </TouchableOpacity>
+        </ScrollView>
       </LinearGradient>
     </View>
   );
@@ -109,6 +124,13 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     maxWidth: 390,
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  content: {
+    flex: 1,
     minHeight: 844,
     alignItems: 'center',
     paddingHorizontal: 42,
@@ -219,6 +241,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(32, 51, 95, 0.7)',
     marginLeft: 64,
   },
+  footer: {
+    width: '100%',
+    marginTop: 'auto',
+  },
   primaryButton: {
     width: '100%',
     height: 56,
@@ -247,5 +273,6 @@ const styles = StyleSheet.create({
     color: '#7D8CC4',
     fontSize: 13,
     fontWeight: '500',
+    textAlign: 'center',
   },
 });

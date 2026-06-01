@@ -8,6 +8,9 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 
 export default function CreateAccountScreen() {
@@ -17,36 +20,72 @@ export default function CreateAccountScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
+  const [errors, setErrors] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    terms: '',
+  });
+
   const hasMinLength = password.length >= 8;
   const hasUppercase = /[A-Z]/.test(password);
   const hasLowercase = /[a-z]/.test(password);
   const hasNumberOrSpecial = /[\d!@#$%^&*(),.?":{}|<>]/.test(password);
-
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
+  const passwordValid =
+    hasMinLength && hasUppercase && hasLowercase && hasNumberOrSpecial;
+
+  const clearError = (field: keyof typeof errors) => {
+    if (errors[field]) {
+      setErrors((previousErrors) => ({
+        ...previousErrors,
+        [field]: '',
+      }));
+    }
+  };
+
   const handleCreateAccount = () => {
+    const newErrors = {
+      fullName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      terms: '',
+    };
+
     if (!fullName.trim()) {
-      Alert.alert('Missing name', 'Please enter your full name.');
-      return;
+      newErrors.fullName = 'Full name is required.';
     }
 
-    if (!email.trim() || !emailValid) {
-      Alert.alert('Invalid email', 'Please enter a valid email address.');
-      return;
+    if (!email.trim()) {
+      newErrors.email = 'Email address is required.';
+    } else if (!emailValid) {
+      newErrors.email = 'Please enter a valid email address.';
     }
 
-    if (!hasMinLength || !hasUppercase || !hasLowercase || !hasNumberOrSpecial) {
-      Alert.alert('Weak password', 'Please complete all password requirements.');
-      return;
+    if (!password.trim()) {
+      newErrors.password = 'Password is required.';
+    } else if (!passwordValid) {
+      newErrors.password = 'Password must include all required elements below.';
     }
 
-    if (password !== confirmPassword) {
-      Alert.alert('Password mismatch', 'Your passwords do not match.');
-      return;
+    if (!confirmPassword.trim()) {
+      newErrors.confirmPassword = 'Please confirm your password.';
+    } else if (password !== confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match.';
     }
 
     if (!acceptedTerms) {
-      Alert.alert('Terms required', 'Please agree to the Terms of Use and Privacy Policy.');
+      newErrors.terms = 'You must agree to the Terms of Use and Privacy Policy.';
+    }
+
+    setErrors(newErrors);
+
+    const hasErrors = Object.values(newErrors).some((message) => message !== '');
+
+    if (hasErrors) {
       return;
     }
 
@@ -60,108 +99,169 @@ export default function CreateAccountScreen() {
         locations={[0, 0.22, 0.48, 0.75, 1]}
         style={styles.container}
       >
-        <Link href="/Onboarding/privacy" asChild>
-          <TouchableOpacity style={styles.backButton}>
-            <Text style={styles.backText}>‹</Text>
-          </TouchableOpacity>
-        </Link>
-
-        <View style={styles.logoBox}>
-          <Text style={styles.logo}>♢</Text>
-        </View>
-
-        <Text style={styles.appName}>Suraksha SMS</Text>
-        <Text style={styles.title}>Create your account</Text>
-
-        <Text style={styles.subtitle}>
-          Join Suraksha SMS and take control of your security and privacy.
-        </Text>
-
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            placeholder="Full Name"
-            placeholderTextColor="#65729A"
-            value={fullName}
-            onChangeText={setFullName}
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Email Address"
-            placeholderTextColor="#65729A"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="#65729A"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Confirm Password"
-            placeholderTextColor="#65729A"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry
-          />
-        </View>
-
-        <View style={styles.rulesCard}>
-          <Text style={styles.rulesTitle}>Your password must include:</Text>
-          <Rule complete={hasMinLength} text="At least 8 characters" />
-          <Rule complete={hasUppercase} text="One uppercase letter" />
-          <Rule complete={hasLowercase} text="One lowercase letter" />
-          <Rule complete={hasNumberOrSpecial} text="One number or special character" />
-        </View>
-
-        <TouchableOpacity
-          style={styles.termsRow}
-          onPress={() => setAcceptedTerms(!acceptedTerms)}
-          activeOpacity={0.8}
+        <KeyboardAvoidingView
+          style={styles.keyboardView}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
-          <View style={[styles.checkbox, acceptedTerms && styles.checkboxActive]}>
-            {acceptedTerms && <Text style={styles.checkboxTick}>✓</Text>}
-          </View>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={styles.scrollContent}
+          >
+            <Link href="/Onboarding/privacy" asChild>
+              <TouchableOpacity style={styles.backButton}>
+                <Text style={styles.backText}>‹</Text>
+              </TouchableOpacity>
+            </Link>
 
-          <Text style={styles.termsText}>
-            I agree to the <Text style={styles.linkText}>Terms of Use</Text> and{' '}
-            <Text style={styles.linkText}>Privacy Policy</Text>
-          </Text>
-        </TouchableOpacity>
+            <View style={styles.logoBox}>
+              <Text style={styles.logo}>♢</Text>
+            </View>
 
-        <TouchableOpacity style={styles.primaryButton} onPress={handleCreateAccount}>
-          <Text style={styles.primaryText}>Create Account</Text>
-          <Text style={styles.arrow}>→</Text>
-        </TouchableOpacity>
+            <Text style={styles.appName}>Suraksha SMS</Text>
+            <Text style={styles.title}>Create your account</Text>
 
-        <View style={styles.dividerRow}>
-          <View style={styles.line} />
-          <Text style={styles.dividerText}>or sign up with</Text>
-          <View style={styles.line} />
-        </View>
+            <Text style={styles.subtitle}>
+              Join Suraksha SMS and take control of your security and privacy.
+            </Text>
 
-        <TouchableOpacity style={styles.socialButton}>
-          <Text style={styles.google}>G</Text>
-          <Text style={styles.socialText}>Continue with Google</Text>
-        </TouchableOpacity>
+            <View style={styles.form}>
+              <View style={styles.inputGroup}>
+                <TextInput
+                  style={[styles.input, errors.fullName ? styles.inputError : null]}
+                  placeholder="Full Name"
+                  placeholderTextColor="#65729A"
+                  value={fullName}
+                  onChangeText={(text) => {
+                    setFullName(text);
+                    clearError('fullName');
+                  }}
+                />
+                {errors.fullName ? (
+                  <Text style={styles.errorText}>{errors.fullName}</Text>
+                ) : null}
+              </View>
 
-        <TouchableOpacity style={styles.socialButton}>
-          <Text style={styles.apple}></Text>
-          <Text style={styles.socialText}>Continue with Apple</Text>
-        </TouchableOpacity>
+              <View style={styles.inputGroup}>
+                <TextInput
+                  style={[styles.input, errors.email ? styles.inputError : null]}
+                  placeholder="Email Address"
+                  placeholderTextColor="#65729A"
+                  value={email}
+                  onChangeText={(text) => {
+                    setEmail(text);
+                    clearError('email');
+                  }}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+                {errors.email ? (
+                  <Text style={styles.errorText}>{errors.email}</Text>
+                ) : null}
+              </View>
 
-        <Text style={styles.loginText}>
-          Already have an account? <Text style={styles.loginLink}>Log In</Text>
-        </Text>
+              <View style={styles.inputGroup}>
+                <TextInput
+                  style={[styles.input, errors.password ? styles.inputError : null]}
+                  placeholder="Password"
+                  placeholderTextColor="#65729A"
+                  value={password}
+                  onChangeText={(text) => {
+                    setPassword(text);
+                    clearError('password');
+                  }}
+                  secureTextEntry
+                />
+                {errors.password ? (
+                  <Text style={styles.errorText}>{errors.password}</Text>
+                ) : null}
+              </View>
+
+              <View style={styles.inputGroup}>
+                <TextInput
+                  style={[styles.input, errors.confirmPassword ? styles.inputError : null]}
+                  placeholder="Confirm Password"
+                  placeholderTextColor="#65729A"
+                  value={confirmPassword}
+                  onChangeText={(text) => {
+                    setConfirmPassword(text);
+                    clearError('confirmPassword');
+                  }}
+                  secureTextEntry
+                />
+                {errors.confirmPassword ? (
+                  <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+                ) : null}
+              </View>
+            </View>
+
+            <View style={styles.rulesCard}>
+              <Text style={styles.rulesTitle}>Your password must include:</Text>
+              <Rule complete={hasMinLength} text="At least 8 characters" />
+              <Rule complete={hasUppercase} text="One uppercase letter" />
+              <Rule complete={hasLowercase} text="One lowercase letter" />
+              <Rule complete={hasNumberOrSpecial} text="One number or special character" />
+            </View>
+
+            <TouchableOpacity
+              style={styles.termsRow}
+              onPress={() => {
+                setAcceptedTerms(!acceptedTerms);
+                clearError('terms');
+              }}
+              activeOpacity={0.8}
+            >
+              <View
+                style={[
+                  styles.checkbox,
+                  acceptedTerms && styles.checkboxActive,
+                  errors.terms ? styles.checkboxError : null,
+                ]}
+              >
+                {acceptedTerms && <Text style={styles.checkboxTick}>✓</Text>}
+              </View>
+
+              <Text style={styles.termsText}>
+                I agree to the <Text style={styles.linkText}>Terms of Use</Text> and{' '}
+                <Text style={styles.linkText}>Privacy Policy</Text>
+              </Text>
+            </TouchableOpacity>
+
+            {errors.terms ? (
+              <Text style={styles.termsErrorText}>{errors.terms}</Text>
+            ) : null}
+
+            <TouchableOpacity style={styles.primaryButton} onPress={handleCreateAccount}>
+              <Text style={styles.primaryText}>Create Account</Text>
+              <Text style={styles.arrow}>→</Text>
+            </TouchableOpacity>
+
+            <View style={styles.dividerRow}>
+              <View style={styles.line} />
+              <Text style={styles.dividerText}>or sign up with</Text>
+              <View style={styles.line} />
+            </View>
+
+            <TouchableOpacity style={styles.socialButton}>
+              <Text style={styles.google}>G</Text>
+              <Text style={styles.socialText}>Continue with Google</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.socialButton}>
+              <Text style={styles.apple}></Text>
+              <Text style={styles.socialText}>Continue with Apple</Text>
+            </TouchableOpacity>
+
+            <Link href="/Onboarding/sign-in" asChild>
+              <TouchableOpacity>
+                <Text style={styles.loginText}>
+                  Already have an account?{' '}
+                  <Text style={styles.loginLink}>Log In</Text>
+                </Text>
+              </TouchableOpacity>
+            </Link>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </LinearGradient>
     </View>
   );
@@ -170,10 +270,12 @@ export default function CreateAccountScreen() {
 function Rule({ complete, text }: { complete: boolean; text: string }) {
   return (
     <View style={styles.ruleRow}>
-      <Text style={[styles.ruleIcon, complete && styles.ruleIconActive]}>
-        {complete ? '✓' : '○'}
-      </Text>
-      <Text style={styles.ruleText}>{text}</Text>
+      <View style={[styles.ruleCircle, complete && styles.ruleCircleActive]}>
+        <Text style={[styles.ruleIcon, complete && styles.ruleIconActive]}>
+          {complete ? '✓' : ''}
+        </Text>
+      </View>
+      <Text style={[styles.ruleText, complete && styles.ruleTextActive]}>{text}</Text>
     </View>
   );
 }
@@ -188,16 +290,20 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     maxWidth: 390,
-    minHeight: 844,
+    flex: 1,
+  },
+  keyboardView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
     paddingHorizontal: 28,
     paddingTop: 56,
-    paddingBottom: 30,
+    paddingBottom: 42,
     alignItems: 'center',
   },
   backButton: {
-    position: 'absolute',
-    top: 54,
-    left: 26,
+    alignSelf: 'flex-start',
     width: 34,
     height: 34,
     borderRadius: 12,
@@ -206,6 +312,7 @@ const styles = StyleSheet.create({
     borderColor: '#20335F',
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 26,
   },
   backText: {
     color: '#DCE4FF',
@@ -219,7 +326,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#7447F5',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 48,
     marginBottom: 10,
     shadowColor: '#7C3AED',
     shadowOpacity: 0.45,
@@ -249,12 +355,15 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     textAlign: 'center',
     maxWidth: 285,
-    marginBottom: 28,
+    marginBottom: 24,
   },
   form: {
     width: '100%',
     gap: 10,
     marginBottom: 14,
+  },
+  inputGroup: {
+    width: '100%',
   },
   input: {
     width: '100%',
@@ -266,6 +375,18 @@ const styles = StyleSheet.create({
     color: 'white',
     paddingHorizontal: 16,
     fontSize: 14,
+  },
+  inputError: {
+    borderColor: '#EF4444',
+    borderWidth: 1.5,
+    backgroundColor: 'rgba(239, 68, 68, 0.08)',
+  },
+  errorText: {
+    color: '#FCA5A5',
+    fontSize: 11,
+    fontWeight: '600',
+    marginTop: 6,
+    marginLeft: 4,
   },
   rulesCard: {
     width: '100%',
@@ -288,10 +409,24 @@ const styles = StyleSheet.create({
     gap: 9,
     marginBottom: 6,
   },
+  ruleCircle: {
+    width: 15,
+    height: 15,
+    borderRadius: 8,
+    borderWidth: 1.4,
+    borderColor: '#65729A',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ruleCircleActive: {
+    borderColor: '#22C55E',
+    backgroundColor: 'rgba(34, 197, 94, 0.12)',
+  },
   ruleIcon: {
     color: '#65729A',
-    fontSize: 13,
-    width: 16,
+    fontSize: 10,
+    fontWeight: '900',
+    lineHeight: 12,
   },
   ruleIconActive: {
     color: '#22C55E',
@@ -300,12 +435,15 @@ const styles = StyleSheet.create({
     color: '#AEB8D6',
     fontSize: 12,
   },
+  ruleTextActive: {
+    color: '#D9FBE5',
+  },
   termsRow: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 16,
+    marginBottom: 6,
   },
   checkbox: {
     width: 19,
@@ -320,6 +458,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#7C3AED',
     borderColor: '#7C3AED',
   },
+  checkboxError: {
+    borderColor: '#EF4444',
+    backgroundColor: 'rgba(239, 68, 68, 0.08)',
+  },
   checkboxTick: {
     color: 'white',
     fontSize: 12,
@@ -329,6 +471,14 @@ const styles = StyleSheet.create({
     color: '#7D8CC4',
     fontSize: 11,
     flex: 1,
+  },
+  termsErrorText: {
+    width: '100%',
+    color: '#FCA5A5',
+    fontSize: 11,
+    fontWeight: '600',
+    marginBottom: 12,
+    marginLeft: 4,
   },
   linkText: {
     color: '#8B5CF6',
@@ -344,6 +494,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     marginBottom: 16,
+    marginTop: 10,
   },
   primaryText: {
     color: 'white',
@@ -401,6 +552,7 @@ const styles = StyleSheet.create({
     color: '#65729A',
     fontSize: 12,
     marginTop: 4,
+    marginBottom: 20,
   },
   loginLink: {
     color: '#8B5CF6',

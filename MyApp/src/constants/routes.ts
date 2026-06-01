@@ -1,9 +1,10 @@
-export const ROUTES = {
-  LOGIN: '/Onboarding/login',
-  ONBOARDING: '/Onboarding/onboarding',
-  PRIVACY: '/Onboarding/privacy',
-  CREATE_ACCOUNT: '/Onboarding/create-account',
-  ALLOW_ACCESS: '/Onboarding/allow-access',
-  SETUP: '/Onboarding/setup',
-  HOME: '/home',
+export const routes = {
+  landingPage: '/Onboarding/landing-page',
+  logIn: '/Onboarding/log-in',
+  onboarding: '/Onboarding/onboarding',
+  privacy: '/Onboarding/privacy',
+  createAccount: '/Onboarding/create-account',
+  allowAccess: '/Onboarding/allow-access',
+  setup: '/Onboarding/setup',
+  home: '/home',
 } as const;
