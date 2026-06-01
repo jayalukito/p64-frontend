@@ -8,33 +8,8 @@ export default function LoginScreen() {
       <LinearGradient
         colors={['#03091F', '#071640', '#081A4C', '#06143A', '#020817']}
         locations={[0, 0.22, 0.48, 0.75, 1]}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
         style={styles.container}
       >
-        <LinearGradient
-          colors={[
-            'rgba(113, 76, 255, 0)',
-            'rgba(113, 76, 255, 0.12)',
-            'rgba(74, 118, 255, 0.10)',
-            'rgba(113, 76, 255, 0)',
-          ]}
-          locations={[0, 0.35, 0.62, 1]}
-          start={{ x: 0.2, y: 0 }}
-          end={{ x: 0.8, y: 1 }}
-          style={styles.softShine}
-        />
-
-        <LinearGradient
-          colors={[
-            'rgba(255,255,255,0.04)',
-            'rgba(255,255,255,0)',
-          ]}
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-          style={styles.topSheen}
-        />
-
         <View style={styles.logoBox}>
           <Text style={styles.logo}>♢</Text>
         </View>
@@ -42,18 +17,16 @@ export default function LoginScreen() {
         <Text style={styles.title}>Suraksha SMS</Text>
         <Text style={styles.badge}>Protecting you from SMS scams</Text>
 
-        <Link href="/onboarding" asChild>
+        <Link href="/Onboarding/onboarding" asChild>
           <TouchableOpacity style={styles.primaryButton}>
             <Text style={styles.primaryText}>Log In</Text>
             <Text style={styles.arrow}>→</Text>
           </TouchableOpacity>
         </Link>
 
-        <Link href="/onboarding" asChild>
-          <TouchableOpacity style={styles.secondaryButton}>
-            <Text style={styles.secondaryText}>♙  Create Account</Text>
-          </TouchableOpacity>
-        </Link>
+        <TouchableOpacity style={styles.secondaryButton}>
+          <Text style={styles.secondaryText}>♙  Create Account</Text>
+        </TouchableOpacity>
 
         <View style={styles.dividerRow}>
           <View style={styles.line} />
@@ -95,23 +68,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 28,
-    paddingVertical: 40,
-    overflow: 'hidden',
-  },
-  softShine: {
-    position: 'absolute',
-    top: -50,
-    left: -50,
-    width: 490,
-    height: 980,
-    opacity: 1,
-    transform: [{ rotate: '8deg' }],
-  },
-  topSheen: {
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    height: 260,
   },
   logoBox: {
     width: 76,
@@ -122,13 +78,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 22,
     shadowColor: '#7C3AED',
-    shadowOpacity: 0.45,
-    shadowRadius: 28,
+    shadowOpacity: 0.5,
+    shadowRadius: 26,
   },
   logo: {
     color: 'white',
     fontSize: 38,
-    fontWeight: '800',
+    fontWeight: '900',
   },
   title: {
     color: 'white',

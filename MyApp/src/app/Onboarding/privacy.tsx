@@ -8,23 +8,8 @@ export default function PrivacyScreen() {
       <LinearGradient
         colors={['#03091F', '#071640', '#081A4C', '#06143A', '#020817']}
         locations={[0, 0.22, 0.48, 0.75, 1]}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
         style={styles.container}
       >
-        <LinearGradient
-          colors={[
-            'rgba(113, 76, 255, 0)',
-            'rgba(113, 76, 255, 0.10)',
-            'rgba(74, 118, 255, 0.08)',
-            'rgba(113, 76, 255, 0)',
-          ]}
-          locations={[0, 0.35, 0.62, 1]}
-          start={{ x: 0.2, y: 0 }}
-          end={{ x: 0.8, y: 1 }}
-          style={styles.softShine}
-        />
-
         <View style={styles.progress}>
           <View style={styles.dot} />
           <View style={styles.dotActive} />
@@ -32,20 +17,20 @@ export default function PrivacyScreen() {
         </View>
 
         <View style={styles.visualWrap}>
-          <View style={styles.ringOne} />
-          <View style={styles.ringTwo} />
-          <View style={styles.ringThree} />
+          <View style={styles.ringLarge} />
+          <View style={styles.ringMedium} />
+          <View style={styles.ringSmall} />
 
           <View style={styles.encryptedBadge}>
-            <Text style={styles.badgeText}>▣  Encrypted</Text>
+            <Text style={styles.badgeText}>▣ Encrypted</Text>
           </View>
 
-          <View style={styles.onDeviceBadge}>
-            <Text style={styles.badgeText}>▯  On-Device</Text>
+          <View style={styles.deviceBadge}>
+            <Text style={styles.badgeText}>▯ On-Device</Text>
           </View>
 
           <View style={styles.uploadBadge}>
-            <Text style={styles.uploadText}>⌁  No Uploads</Text>
+            <Text style={styles.uploadText}>⌁ No Uploads</Text>
           </View>
 
           <View style={styles.shadowBase} />
@@ -84,7 +69,7 @@ export default function PrivacyScreen() {
         </View>
 
         <View style={styles.footer}>
-          <Link href={{ pathname: '/create-account' as any }} asChild>
+          <Link href="/Onboarding/create-account" asChild>
             <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>Next</Text>
               <Text style={styles.arrow}>→</Text>
@@ -111,23 +96,13 @@ const styles = StyleSheet.create({
     minHeight: 844,
     alignItems: 'center',
     paddingHorizontal: 28,
-    paddingTop: 92,
-    paddingBottom: 40,
-    overflow: 'hidden',
-  },
-  softShine: {
-    position: 'absolute',
-    top: -50,
-    left: -50,
-    width: 490,
-    height: 980,
-    opacity: 1,
-    transform: [{ rotate: '8deg' }],
+    paddingTop: 88,
+    paddingBottom: 46,
   },
   progress: {
     flexDirection: 'row',
     gap: 8,
-    marginBottom: 40,
+    marginBottom: 34,
   },
   dot: {
     width: 28,
@@ -139,43 +114,43 @@ const styles = StyleSheet.create({
     width: 28,
     height: 5,
     borderRadius: 10,
-    backgroundColor: '#7C3AED',
+    backgroundColor: '#8B5CF6',
   },
   visualWrap: {
     width: 250,
-    height: 240,
+    height: 235,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 22,
+    marginBottom: 18,
   },
-  ringOne: {
+  ringLarge: {
     position: 'absolute',
     width: 220,
     height: 220,
     borderRadius: 110,
     borderWidth: 1,
-    borderColor: 'rgba(124, 58, 237, 0.16)',
+    borderColor: 'rgba(124,58,237,0.14)',
   },
-  ringTwo: {
+  ringMedium: {
     position: 'absolute',
     width: 174,
     height: 174,
     borderRadius: 87,
     borderWidth: 1,
-    borderColor: 'rgba(124, 58, 237, 0.22)',
+    borderColor: 'rgba(124,58,237,0.22)',
   },
-  ringThree: {
+  ringSmall: {
     position: 'absolute',
     width: 126,
     height: 126,
     borderRadius: 63,
     borderWidth: 1,
-    borderColor: 'rgba(124, 58, 237, 0.30)',
+    borderColor: 'rgba(124,58,237,0.32)',
   },
   encryptedBadge: {
     position: 'absolute',
     top: 18,
-    right: 14,
+    right: 10,
     paddingHorizontal: 14,
     paddingVertical: 7,
     borderRadius: 18,
@@ -183,10 +158,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#7C3AED',
   },
-  onDeviceBadge: {
+  deviceBadge: {
     position: 'absolute',
-    left: -6,
-    top: 108,
+    left: -4,
+    top: 104,
     paddingHorizontal: 14,
     paddingVertical: 7,
     borderRadius: 18,
@@ -197,7 +172,7 @@ const styles = StyleSheet.create({
   uploadBadge: {
     position: 'absolute',
     right: 8,
-    bottom: 46,
+    bottom: 44,
     paddingHorizontal: 14,
     paddingVertical: 7,
     borderRadius: 18,
@@ -208,20 +183,20 @@ const styles = StyleSheet.create({
   badgeText: {
     color: '#E5DCFF',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   uploadText: {
     color: '#22C55E',
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   shadowBase: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 48,
     width: 100,
     height: 24,
     borderRadius: 60,
-    backgroundColor: 'rgba(124, 58, 237, 0.32)',
+    backgroundColor: 'rgba(124,58,237,0.32)',
     transform: [{ scaleX: 1.55 }],
   },
   lockBody: {
@@ -230,10 +205,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 28,
-    shadowColor: '#8B5CF6',
-    shadowOpacity: 0.7,
-    shadowRadius: 24,
+    marginTop: 30,
   },
   lockShackle: {
     position: 'absolute',
@@ -263,7 +235,7 @@ const styles = StyleSheet.create({
     color: '#C7B8FF',
     borderColor: '#7C3AED',
     borderWidth: 1,
-    backgroundColor: 'rgba(25, 31, 78, 0.8)',
+    backgroundColor: 'rgba(25,31,78,0.8)',
     paddingHorizontal: 16,
     paddingVertical: 6,
     borderRadius: 20,
@@ -283,13 +255,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 22,
     textAlign: 'center',
-    marginBottom: 28,
+    marginBottom: 26,
   },
   list: {
     alignSelf: 'stretch',
     paddingHorizontal: 20,
     gap: 14,
-    marginBottom: 48,
   },
   listItem: {
     flexDirection: 'row',
@@ -317,7 +288,7 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
   },
   button: {
-    backgroundColor: '#8B00FF',
+    backgroundColor: '#7C3AED',
     width: '100%',
     height: 56,
     borderRadius: 14,

@@ -8,23 +8,8 @@ export default function OnboardingScreen() {
       <LinearGradient
         colors={['#03091F', '#071640', '#081A4C', '#06143A', '#020817']}
         locations={[0, 0.22, 0.48, 0.75, 1]}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
         style={styles.container}
       >
-        <LinearGradient
-          colors={[
-            'rgba(113, 76, 255, 0)',
-            'rgba(113, 76, 255, 0.10)',
-            'rgba(74, 118, 255, 0.08)',
-            'rgba(113, 76, 255, 0)',
-          ]}
-          locations={[0, 0.35, 0.62, 1]}
-          start={{ x: 0.2, y: 0 }}
-          end={{ x: 0.8, y: 1 }}
-          style={styles.softShine}
-        />
-
         <View style={styles.progress}>
           <View style={styles.dotActive} />
           <View style={styles.dot} />
@@ -32,39 +17,36 @@ export default function OnboardingScreen() {
         </View>
 
         <View style={styles.visualWrap}>
-          <View style={styles.ringOne} />
-          <View style={styles.ringTwo} />
-          <View style={styles.ringThree} />
+          <View style={styles.ringLarge} />
+          <View style={styles.ringMedium} />
+          <View style={styles.ringSmall} />
 
-          <View style={styles.aiBotBadge}>
-            <Text style={styles.aiBotText}>⌘ AI Bot</Text>
+          <View style={styles.aiBadge}>
+            <Text style={styles.aiText}>⌘ AI Bot</Text>
           </View>
 
-          <View style={styles.chatBubble}>
-            <Text style={styles.smallIcon}>⌕</Text>
+          <View style={styles.sideBubbleLeft}>
+            <Text style={styles.sideIcon}>⌕</Text>
           </View>
 
-          <View style={styles.bellBubble}>
-            <Text style={styles.smallIcon}>♧</Text>
+          <View style={styles.sideBubbleRight}>
+            <Text style={styles.greenIcon}>♧</Text>
           </View>
 
           <View style={styles.shadowBase} />
 
-          <LinearGradient
-            colors={['#8B5CF6', '#6D28D9']}
-            style={styles.shield}
-          >
-            <Text style={styles.icon}>✓</Text>
+          <LinearGradient colors={['#8B5CF6', '#6D28D9']} style={styles.shield}>
+            <Text style={styles.check}>✓</Text>
           </LinearGradient>
         </View>
 
-        <Text style={styles.badge}>AI POWERED</Text>
+        <Text style={styles.pill}>AI POWERED</Text>
 
         <Text style={styles.title}>AI-Powered Protection</Text>
 
         <Text style={styles.subtitle}>
-          Our smart AI scans and detects suspicious messages in real-time, keeping you one step
-          ahead of SMS scams.
+          Our smart AI scans and detects suspicious messages in real-time, keeping you one
+          step ahead of SMS scams.
         </Text>
 
         <View style={styles.bottomDots}>
@@ -73,14 +55,16 @@ export default function OnboardingScreen() {
           <View style={styles.smallDot} />
         </View>
 
-        <Link href={{ pathname: '/privacy' as any }} asChild>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Next</Text>
-            <Text style={styles.arrow}>→</Text>
-          </TouchableOpacity>
-        </Link>
+        <View style={styles.footer}>
+          <Link href="/Onboarding/privacy" asChild>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>Next</Text>
+              <Text style={styles.arrow}>→</Text>
+            </TouchableOpacity>
+          </Link>
 
-        <Text style={styles.skip}>Skip for now</Text>
+          <Text style={styles.skip}>Skip for now</Text>
+        </View>
       </LinearGradient>
     </View>
   );
@@ -99,23 +83,13 @@ const styles = StyleSheet.create({
     minHeight: 844,
     alignItems: 'center',
     paddingHorizontal: 28,
-    paddingTop: 92,
-    paddingBottom: 48,
-    overflow: 'hidden',
-  },
-  softShine: {
-    position: 'absolute',
-    top: -50,
-    left: -50,
-    width: 490,
-    height: 980,
-    opacity: 1,
-    transform: [{ rotate: '8deg' }],
+    paddingTop: 88,
+    paddingBottom: 46,
   },
   progress: {
     flexDirection: 'row',
     gap: 8,
-    marginBottom: 30,
+    marginBottom: 34,
   },
   dot: {
     width: 28,
@@ -127,42 +101,42 @@ const styles = StyleSheet.create({
     width: 28,
     height: 5,
     borderRadius: 10,
-    backgroundColor: '#A100FF',
+    backgroundColor: '#8B5CF6',
   },
   visualWrap: {
-    width: 230,
+    width: 240,
     height: 230,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 18,
   },
-  ringOne: {
+  ringLarge: {
     position: 'absolute',
-    width: 210,
-    height: 210,
-    borderRadius: 105,
+    width: 220,
+    height: 220,
+    borderRadius: 110,
     borderWidth: 1,
-    borderColor: 'rgba(124, 58, 237, 0.16)',
+    borderColor: 'rgba(124,58,237,0.14)',
   },
-  ringTwo: {
+  ringMedium: {
     position: 'absolute',
-    width: 164,
-    height: 164,
-    borderRadius: 82,
+    width: 172,
+    height: 172,
+    borderRadius: 86,
     borderWidth: 1,
-    borderColor: 'rgba(124, 58, 237, 0.22)',
+    borderColor: 'rgba(124,58,237,0.22)',
   },
-  ringThree: {
+  ringSmall: {
     position: 'absolute',
-    width: 116,
-    height: 116,
-    borderRadius: 58,
+    width: 122,
+    height: 122,
+    borderRadius: 61,
     borderWidth: 1,
-    borderColor: 'rgba(124, 58, 237, 0.30)',
+    borderColor: 'rgba(124,58,237,0.32)',
   },
-  aiBotBadge: {
+  aiBadge: {
     position: 'absolute',
-    top: 18,
+    top: 10,
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 18,
@@ -170,54 +144,52 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#7C3AED',
   },
-  aiBotText: {
+  aiText: {
     color: '#D8CCFF',
     fontSize: 11,
-    fontWeight: '600',
+    fontWeight: '700',
   },
-  chatBubble: {
+  sideBubbleLeft: {
     position: 'absolute',
     left: 8,
-    top: 98,
-    width: 34,
-    height: 30,
-    borderRadius: 14,
+    top: 94,
+    width: 38,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: '#121A48',
     borderWidth: 1,
     borderColor: '#7C3AED',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#7C3AED',
-    shadowOpacity: 0.6,
-    shadowRadius: 12,
   },
-  bellBubble: {
+  sideBubbleRight: {
     position: 'absolute',
     right: 8,
-    top: 98,
-    width: 34,
-    height: 30,
-    borderRadius: 14,
+    top: 94,
+    width: 38,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: '#121A48',
     borderWidth: 1,
-    borderColor: '#00C853',
+    borderColor: '#22C55E',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#00C853',
-    shadowOpacity: 0.35,
-    shadowRadius: 10,
   },
-  smallIcon: {
+  sideIcon: {
     color: '#D8CCFF',
+    fontSize: 13,
+  },
+  greenIcon: {
+    color: '#22C55E',
     fontSize: 13,
   },
   shadowBase: {
     position: 'absolute',
-    bottom: 35,
-    width: 110,
-    height: 26,
+    bottom: 38,
+    width: 112,
+    height: 24,
     borderRadius: 60,
-    backgroundColor: 'rgba(124, 58, 237, 0.34)',
+    backgroundColor: 'rgba(124,58,237,0.34)',
     transform: [{ scaleX: 1.4 }],
   },
   shield: {
@@ -226,26 +198,24 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#8B5CF6',
-    shadowOpacity: 0.7,
-    shadowRadius: 24,
     borderWidth: 2,
-    borderColor: 'rgba(199, 184, 255, 0.28)',
+    borderColor: 'rgba(199,184,255,0.28)',
   },
-  icon: {
+  check: {
     color: 'white',
     fontSize: 54,
-    fontWeight: '800',
+    fontWeight: '900',
   },
-  badge: {
+  pill: {
     color: '#C7B8FF',
     borderColor: '#7C3AED',
     borderWidth: 1,
-    backgroundColor: 'rgba(25, 31, 78, 0.8)',
+    backgroundColor: 'rgba(25,31,78,0.8)',
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 20,
     fontSize: 11,
+    fontWeight: '700',
     marginBottom: 18,
   },
   title: {
@@ -266,7 +236,7 @@ const styles = StyleSheet.create({
   bottomDots: {
     flexDirection: 'row',
     gap: 8,
-    marginBottom: 92,
+    marginBottom: 34,
   },
   smallDot: {
     width: 7,
@@ -278,10 +248,14 @@ const styles = StyleSheet.create({
     width: 18,
     height: 5,
     borderRadius: 8,
-    backgroundColor: '#A100FF',
+    backgroundColor: '#8B5CF6',
+  },
+  footer: {
+    width: '100%',
+    marginTop: 'auto',
   },
   button: {
-    backgroundColor: '#8B00FF',
+    backgroundColor: '#7C3AED',
     width: '100%',
     height: 56,
     borderRadius: 14,
@@ -303,5 +277,6 @@ const styles = StyleSheet.create({
   skip: {
     color: '#7D8CC4',
     fontSize: 13,
+    textAlign: 'center',
   },
 });
