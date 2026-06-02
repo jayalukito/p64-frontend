@@ -9,12 +9,17 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
+import axios from 'axios';
+import FullScreenLoader from '@/components/loaders/FullScreenLoader';
+// Import SecureStore or AsyncStorage here if you need to save the login token
+import * as SecureStore from 'expo-secure-store';
 
 export default function SignInScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     if (!email.trim()) {
       Alert.alert('Email Required', 'Please enter your email address.');
       return;
@@ -25,11 +30,46 @@ export default function SignInScreen() {
       return;
     }
 
-    router.push('./home');
-  };
+    setIsLoading(true);
 
+    try {
+      // 1. Fetch the base URL from your .env file
+      const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+      
+      // 2. Make the POST request to your backend endpoint (e.g., /auth/login)
+      const response = await axios.post(`${apiUrl}/auth/login`, {
+        email: email.trim(),
+        password: password
+      });
+
+      const user = response.data.data.user;
+      const accessToken = response.data.data.accessToken;
+
+      // 3. Handle successful response (Assuming your backend sends a token)
+      if (response.data && accessToken) {
+
+        console.log('Login successful');
+       
+        // router.push('./home');
+      } else {
+        Alert.alert('Error', 'Login failed. Please check your credentials.');
+      }
+      
+    } catch (error: any) {
+      // 4. Handle errors (e.g., 401 Unauthorized, 500 Server Error)
+      console.error("Login Error: ", error);
+      
+      // Extract the error message from the backend if it exists
+      const errorMessage = error.response?.data?.message || 'An error occurred during sign in. Please try again later.';
+      console.error('Error message:', errorMessage);
+      Alert.alert('Sign In Failed', errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <View style={styles.screen}>
+      <FullScreenLoader visible={isLoading} message="Authenticating..." />
       <LinearGradient
         colors={['#03091F', '#071640', '#081A4C', '#06143A', '#020817']}
         locations={[0, 0.22, 0.48, 0.75, 1]}

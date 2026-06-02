@@ -11,7 +11,12 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator
 } from 'react-native';
+
+import FullScreenLoader from "@/components/loaders/FullScreenLoader";
+
+import axios from "axios"
 
 export default function CreateAccountScreen() {
   const [fullName, setFullName] = useState('');
@@ -19,6 +24,7 @@ export default function CreateAccountScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [errors, setErrors] = useState({
     fullName: '',
@@ -46,7 +52,7 @@ export default function CreateAccountScreen() {
     }
   };
 
-  const handleCreateAccount = () => {
+  const handleCreateAccount = async () => {
     const newErrors = {
       fullName: '',
       email: '',
@@ -89,11 +95,41 @@ export default function CreateAccountScreen() {
       return;
     }
 
-    router.push('/Onboarding/allow-access');
+    try{
+
+      setIsLoading(true);
+      const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
+      const response = await axios.post(`${apiUrl}/auth/register`, {
+        name: fullName,
+        email: email,
+        password: password
+      })
+
+      const user = response.data.data.user;
+      const accessToken = response.data.data.accessToken;
+
+      if(response.data && accessToken){
+        console.log('Registration successful');
+        router.push('/Onboarding/allow-access');
+      }else{
+        Alert.alert('Registration failed', 'Please try again.');
+      }
+    }catch(error:any){
+      console.error("Login Error:",error);
+
+      const errorMessage = error.response?.data?.message;
+      console.error('Error message:',errorMessage);
+      Alert.alert('Registration failed', errorMessage);
+    }finally{
+      setIsLoading(false);
+    }
+    
   };
 
   return (
     <View style={styles.screen}>
+      <FullScreenLoader visible={isLoading} message="Authenticating..." />
       <LinearGradient
         colors={['#03091F', '#071640', '#081A4C', '#06143A', '#020817']}
         locations={[0, 0.22, 0.48, 0.75, 1]}
@@ -232,8 +268,14 @@ export default function CreateAccountScreen() {
             ) : null}
 
             <TouchableOpacity style={styles.primaryButton} onPress={handleCreateAccount}>
-              <Text style={styles.primaryText}>Create Account</Text>
-              <Text style={styles.arrow}>→</Text>
+              {isLoading ? (
+                <ActivityIndicator color="#FFFFFF" size="small" />
+              ) : (
+                <>
+                  <Text style={styles.primaryText}>Create Account</Text>
+                  <Text style={styles.arrow}>→</Text>
+                </>
+              )}
             </TouchableOpacity>
 
             <View style={styles.dividerRow}>
