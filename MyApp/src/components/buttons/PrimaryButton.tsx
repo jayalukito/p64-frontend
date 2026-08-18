@@ -10,14 +10,15 @@ type Props = {
 export default function PrimaryButton({ title, onPress, rightIcon }: Props) {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress} activeOpacity={0.85}>
-      <Text style={styles.text}>{title}</Text>
-      {rightIcon ?? <Text style={styles.arrow}>→</Text>}
+      <Text style={styles.text}>{title} </Text>
+      <Text style={styles.text}>{rightIcon ?? null}</Text>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
+    
     width: '100%',
     height: 56,
     borderRadius: 14,

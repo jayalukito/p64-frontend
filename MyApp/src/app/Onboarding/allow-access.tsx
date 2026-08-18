@@ -10,7 +10,7 @@ import {
 
 export default function AllowAccessScreen() {
   const handleAllowAccess = () => {
-    router.push('/Onboarding/setup');
+    router.push('/onboarding/setup');
   };
 
   return (
@@ -76,7 +76,7 @@ export default function AllowAccessScreen() {
                 <Text style={styles.primaryText}>Allow Access</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => router.push('/Onboarding/setup')}>
+              <TouchableOpacity onPress={() => router.push('/onboarding/setup')}>
                 <Text style={styles.notNow}>Not Now</Text>
               </TouchableOpacity>
             </View>

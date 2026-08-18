@@ -1,5 +1,6 @@
-import { Redirect } from 'expo-router';
+import { Redirect } from "expo-router";
+import { routes } from "@/constants/routes";
 
 export default function Index() {
-  return <Redirect href="/Onboarding/landing-page" />;
+  return <Redirect href={routes.landingPage} />;
 }

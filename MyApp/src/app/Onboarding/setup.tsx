@@ -66,7 +66,7 @@ export default function SetupScreen() {
             <View style={styles.footer}>
               <TouchableOpacity
                 style={styles.primaryButton}
-                onPress={() => router.push('/Onboarding/home')}
+                onPress={() => router.push('/onboarding/home')}
               >
                 <Text style={styles.primaryText}>Continue to Dashboard</Text>
                 <Text style={styles.arrow}>→</Text>

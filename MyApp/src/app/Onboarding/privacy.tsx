@@ -80,14 +80,14 @@ export default function PrivacyScreen() {
             </View>
 
             <View style={styles.footer}>
-              <Link href="/Onboarding/create-account" asChild>
+              <Link href="/onboarding/create-account" asChild>
                 <TouchableOpacity style={styles.button}>
                   <Text style={styles.buttonText}>Next</Text>
                   <Text style={styles.arrow}>→</Text>
                 </TouchableOpacity>
               </Link>
 
-              <Link href="/Onboarding/create-account" asChild>
+              <Link href="/onboarding/create-account" asChild>
                 <TouchableOpacity>
                   <Text style={styles.skip}>Skip for now</Text>
                 </TouchableOpacity>

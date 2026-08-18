@@ -1,5 +1,5 @@
 import { Link, router } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
+import  GradientBackground from '@/components/layout/GradientBackground';
 import { useState } from 'react';
 import {
   View,
@@ -111,7 +111,7 @@ export default function CreateAccountScreen() {
 
       if(response.data && accessToken){
         console.log('Registration successful');
-        router.push('/Onboarding/allow-access');
+        router.push('/onboarding/allow-access');
       }else{
         Alert.alert('Registration failed', 'Please try again.');
       }
@@ -130,11 +130,7 @@ export default function CreateAccountScreen() {
   return (
     <View style={styles.screen}>
       <FullScreenLoader visible={isLoading} message="Authenticating..." />
-      <LinearGradient
-        colors={['#03091F', '#071640', '#081A4C', '#06143A', '#020817']}
-        locations={[0, 0.22, 0.48, 0.75, 1]}
-        style={styles.container}
-      >
+      <GradientBackground >
         <KeyboardAvoidingView
           style={styles.keyboardView}
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -144,7 +140,7 @@ export default function CreateAccountScreen() {
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.scrollContent}
           >
-            <Link href="/Onboarding/privacy" asChild>
+            <Link href="/onboarding/privacy" asChild>
               <TouchableOpacity style={styles.backButton}>
                 <Text style={styles.backText}>‹</Text>
               </TouchableOpacity>
@@ -294,7 +290,7 @@ export default function CreateAccountScreen() {
               <Text style={styles.socialText}>Continue with Apple</Text>
             </TouchableOpacity>
 
-            <Link href="/Onboarding/sign-in" asChild>
+            <Link href="/onboarding/sign-in" asChild>
               <TouchableOpacity>
                 <Text style={styles.loginText}>
                   Already have an account?{' '}
@@ -304,7 +300,7 @@ export default function CreateAccountScreen() {
             </Link>
           </ScrollView>
         </KeyboardAvoidingView>
-      </LinearGradient>
+        </GradientBackground>
     </View>
   );
 }
