@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {
   SafeAreaView,
   ScrollView,
@@ -11,10 +13,100 @@ import {
 
 import { colors } from '@/constants/colours';
 
+const SETTINGS_STORAGE_KEY = '@suraksha_sms_settings';
+
+type DetectionSensitivity = 'Low' | 'Balanced' | 'High';
+
+type StoredSettings = {
+  aiProtection: boolean;
+  notifications: boolean;
+  sensitivity: DetectionSensitivity;
+};
+
 export default function SettingsScreen() {
   const [aiProtection, setAiProtection] = useState(true);
   const [notifications, setNotifications] = useState(true);
-  const [sensitivity, setSensitivity] = useState('Balanced');
+
+  const [sensitivity, setSensitivity] =
+    useState<DetectionSensitivity>('Balanced');
+
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
+
+  // Load saved settings when the Settings screen opens
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const savedSettings = await AsyncStorage.getItem(
+          SETTINGS_STORAGE_KEY
+        );
+
+        if (savedSettings !== null) {
+          const parsedSettings: StoredSettings =
+            JSON.parse(savedSettings);
+
+          setAiProtection(parsedSettings.aiProtection);
+          setNotifications(parsedSettings.notifications);
+          setSensitivity(parsedSettings.sensitivity);
+        }
+      } catch (error) {
+        console.error('Failed to load settings:', error);
+      } finally {
+        setSettingsLoaded(true);
+      }
+    };
+
+    loadSettings();
+  }, []);
+
+  // Save all settings together in AsyncStorage
+  const saveSettings = async (
+    updatedSettings: StoredSettings
+  ) => {
+    try {
+      await AsyncStorage.setItem(
+        SETTINGS_STORAGE_KEY,
+        JSON.stringify(updatedSettings)
+      );
+    } catch (error) {
+      console.error('Failed to save settings:', error);
+    }
+  };
+
+  const handleAiProtectionChange = async (
+    value: boolean
+  ) => {
+    setAiProtection(value);
+
+    await saveSettings({
+      aiProtection: value,
+      notifications,
+      sensitivity,
+    });
+  };
+
+  const handleNotificationsChange = async (
+    value: boolean
+  ) => {
+    setNotifications(value);
+
+    await saveSettings({
+      aiProtection,
+      notifications: value,
+      sensitivity,
+    });
+  };
+
+  const handleSensitivityChange = async (
+    value: DetectionSensitivity
+  ) => {
+    setSensitivity(value);
+
+    await saveSettings({
+      aiProtection,
+      notifications,
+      sensitivity: value,
+    });
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -30,7 +122,10 @@ export default function SettingsScreen() {
         <View style={styles.card}>
           <View style={styles.row}>
             <View style={styles.rowText}>
-              <Text style={styles.rowTitle}>AI Protection</Text>
+              <Text style={styles.rowTitle}>
+                AI Protection
+              </Text>
+
               <Text style={styles.rowDescription}>
                 Automatically detect suspicious messages
               </Text>
@@ -38,7 +133,8 @@ export default function SettingsScreen() {
 
             <Switch
               value={aiProtection}
-              onValueChange={setAiProtection}
+              onValueChange={handleAiProtectionChange}
+              disabled={!settingsLoaded}
               trackColor={{
                 false: colors.border,
                 true: colors.purple,
@@ -51,7 +147,10 @@ export default function SettingsScreen() {
 
           <View style={styles.row}>
             <View style={styles.rowText}>
-              <Text style={styles.rowTitle}>Notifications</Text>
+              <Text style={styles.rowTitle}>
+                Notifications
+              </Text>
+
               <Text style={styles.rowDescription}>
                 Receive alerts for suspicious messages
               </Text>
@@ -59,7 +158,8 @@ export default function SettingsScreen() {
 
             <Switch
               value={notifications}
-              onValueChange={setNotifications}
+              onValueChange={handleNotificationsChange}
+              disabled={!settingsLoaded}
               trackColor={{
                 false: colors.border,
                 true: colors.purple,
@@ -69,22 +169,31 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>DETECTION SENSITIVITY</Text>
+        <Text style={styles.sectionTitle}>
+          DETECTION SENSITIVITY
+        </Text>
 
         <View style={styles.segmentContainer}>
-          {['Low', 'Balanced', 'High'].map((option) => (
+          {(
+            ['Low', 'Balanced', 'High'] as DetectionSensitivity[]
+          ).map((option) => (
             <TouchableOpacity
               key={option}
               style={[
                 styles.segment,
-                sensitivity === option && styles.segmentActive,
+                sensitivity === option &&
+                  styles.segmentActive,
               ]}
-              onPress={() => setSensitivity(option)}
+              onPress={() =>
+                handleSensitivityChange(option)
+              }
+              disabled={!settingsLoaded}
             >
               <Text
                 style={[
                   styles.segmentText,
-                  sensitivity === option && styles.segmentTextActive,
+                  sensitivity === option &&
+                    styles.segmentTextActive,
                 ]}
               >
                 {option}
@@ -94,7 +203,8 @@ export default function SettingsScreen() {
         </View>
 
         <Text style={styles.helperText}>
-          Balanced provides the recommended level of protection.
+          Balanced provides the recommended level of
+          protection.
         </Text>
 
         <Text style={styles.sectionTitle}>GENERAL</Text>
@@ -121,7 +231,9 @@ export default function SettingsScreen() {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.sectionTitle}>PRIVACY & SECURITY</Text>
+        <Text style={styles.sectionTitle}>
+          PRIVACY & SECURITY
+        </Text>
 
         <View style={styles.card}>
           <TouchableOpacity style={styles.navigationRow}>
@@ -143,7 +255,9 @@ export default function SettingsScreen() {
 
         <View style={styles.card}>
           <TouchableOpacity style={styles.navigationRow}>
-            <Text style={styles.rowTitle}>About Suraksha-SMS</Text>
+            <Text style={styles.rowTitle}>
+              About Suraksha-SMS
+            </Text>
 
             <Text style={styles.chevron}>›</Text>
           </TouchableOpacity>
@@ -151,7 +265,9 @@ export default function SettingsScreen() {
           <View style={styles.divider} />
 
           <TouchableOpacity style={styles.navigationRow}>
-            <Text style={styles.rowTitle}>Help & Support</Text>
+            <Text style={styles.rowTitle}>
+              Help & Support
+            </Text>
 
             <Text style={styles.chevron}>›</Text>
           </TouchableOpacity>
