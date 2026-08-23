@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import FullScreenLoader from '@/components/loaders/FullScreenLoader';
-// Import SecureStore or AsyncStorage here if you need to save the login token
 import * as SecureStore from 'expo-secure-store';
 
 export default function SignInScreen() {
@@ -21,57 +20,102 @@ export default function SignInScreen() {
 
   const handleSignIn = async () => {
     if (!email.trim()) {
-      Alert.alert('Email Required', 'Please enter your email address.');
+      Alert.alert(
+        'Email Required',
+        'Please enter your email address.'
+      );
       return;
     }
 
     if (!password.trim()) {
-      Alert.alert('Password Required', 'Please enter your password.');
+      Alert.alert(
+        'Password Required',
+        'Please enter your password.'
+      );
       return;
     }
 
     setIsLoading(true);
 
     try {
-      // 1. Fetch the base URL from your .env file
+      // Fetch the backend base URL from the .env file
       const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-      
-      // 2. Make the POST request to your backend endpoint (e.g., /auth/login)
-      const response = await axios.post(`${apiUrl}/auth/login`, {
-        email: email.trim(),
-        password: password
-      });
+
+      // Send the login request to the backend
+      const response = await axios.post(
+        `${apiUrl}/auth/login`,
+        {
+          email: email.trim(),
+          password,
+        }
+      );
 
       const user = response.data.data.user;
-      const accessToken = response.data.data.accessToken;
+      const accessToken =
+        response.data.data.accessToken;
 
-      // 3. Handle successful response (Assuming your backend sends a token)
+      // Check that login returned an access token
       if (response.data && accessToken) {
-
         console.log('Login successful');
-       
-        // router.push('./home');
+
+        /*
+         * Securely store the access token on the device.
+         * This token will later be removed when the
+         * user logs out.
+         */
+        await SecureStore.setItemAsync(
+          'accessToken',
+          accessToken
+        );
+
+        /*
+         * Replace the Sign In screen with Home.
+         * Using replace prevents the user from pressing
+         * Back and returning to Sign In after login.
+         */
+        router.replace('/Onboarding/home');
       } else {
-        Alert.alert('Error', 'Login failed. Please check your credentials.');
+        Alert.alert(
+          'Error',
+          'Login failed. Please check your credentials.'
+        );
       }
-      
     } catch (error: any) {
-      // 4. Handle errors (e.g., 401 Unauthorized, 500 Server Error)
-      console.error("Login Error: ", error);
-      
-      // Extract the error message from the backend if it exists
-      const errorMessage = error.response?.data?.message || 'An error occurred during sign in. Please try again later.';
-      console.error('Error message:', errorMessage);
-      Alert.alert('Sign In Failed', errorMessage);
+      console.error('Login Error: ', error);
+
+      const errorMessage =
+        error.response?.data?.message ||
+        'An error occurred during sign in. Please try again later.';
+
+      console.error(
+        'Error message:',
+        errorMessage
+      );
+
+      Alert.alert(
+        'Sign In Failed',
+        errorMessage
+      );
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <View style={styles.screen}>
-      <FullScreenLoader visible={isLoading} message="Authenticating..." />
+      <FullScreenLoader
+        visible={isLoading}
+        message="Authenticating..."
+      />
+
       <LinearGradient
-        colors={['#03091F', '#071640', '#081A4C', '#06143A', '#020817']}
+        colors={[
+          '#03091F',
+          '#071640',
+          '#081A4C',
+          '#06143A',
+          '#020817',
+        ]}
         locations={[0, 0.22, 0.48, 0.75, 1]}
         style={styles.container}
       >
@@ -86,12 +130,17 @@ export default function SignInScreen() {
           <Text style={styles.logo}>♢</Text>
         </View>
 
-        <Text style={styles.appName}>Suraksha SMS</Text>
+        <Text style={styles.appName}>
+          Suraksha SMS
+        </Text>
 
-        <Text style={styles.title}>Welcome Back</Text>
+        <Text style={styles.title}>
+          Welcome Back
+        </Text>
 
         <Text style={styles.subtitle}>
-          Sign in to continue protecting yourself from SMS scams.
+          Sign in to continue protecting yourself
+          from SMS scams.
         </Text>
 
         <View style={styles.form}>
@@ -125,36 +174,56 @@ export default function SignInScreen() {
           style={styles.primaryButton}
           onPress={handleSignIn}
         >
-          <Text style={styles.primaryText}>Sign In</Text>
+          <Text style={styles.primaryText}>
+            Sign In
+          </Text>
+
           <Text style={styles.arrow}>→</Text>
         </TouchableOpacity>
 
         <View style={styles.dividerRow}>
           <View style={styles.line} />
-          <Text style={styles.dividerText}>or continue with</Text>
+
+          <Text style={styles.dividerText}>
+            or continue with
+          </Text>
+
           <View style={styles.line} />
         </View>
 
-        <TouchableOpacity style={styles.socialButton}>
+        <TouchableOpacity
+          style={styles.socialButton}
+        >
           <Text style={styles.socialIcon}>G</Text>
+
           <Text style={styles.socialText}>
             Continue with Google
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.socialButton}>
+        <TouchableOpacity
+          style={styles.socialButton}
+        >
           <Text style={styles.socialIcon}></Text>
+
           <Text style={styles.socialText}>
             Continue with Apple
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => router.push('/Onboarding/create-account')}
+          onPress={() =>
+            router.push(
+              '/Onboarding/create-account'
+            )
+          }
         >
           <Text style={styles.createAccount}>
             Don't have an account?{' '}
-            <Text style={styles.createAccountLink}>
+
+            <Text
+              style={styles.createAccountLink}
+            >
               Create Account
             </Text>
           </Text>

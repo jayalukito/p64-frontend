@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 
@@ -46,7 +47,7 @@ export default function SettingsScreen() {
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   /*
-   * Load saved settings when the screen opens.
+   * Load saved settings when the Settings screen opens.
    *
    * DEFAULT_SETTINGS is merged with stored data so that future settings
    * can be added without breaking users who already have older settings
@@ -180,7 +181,6 @@ export default function SettingsScreen() {
       return;
     }
 
-    // Existing project currently contains this Home screen.
     router.replace('/Onboarding/home');
   };
 
@@ -205,6 +205,13 @@ export default function SettingsScreen() {
     );
   };
 
+  /*
+   * Secure logout:
+   * - Confirms the user's intention
+   * - Removes the access token from SecureStore
+   * - Keeps Settings preferences in AsyncStorage
+   * - Replaces the current route with Sign In
+   */
   const handleLogout = () => {
     Alert.alert(
       'Log out',
@@ -217,14 +224,21 @@ export default function SettingsScreen() {
         {
           text: 'Log out',
           style: 'destructive',
-          onPress: () => {
-            /*
-             * Authentication/session clearing should eventually
-             * happen here.
-             *
-             * For now this returns the user to sign in.
-             */
-            router.replace('/Onboarding/sign-in');
+          onPress: async () => {
+            try {
+              await SecureStore.deleteItemAsync(
+                'accessToken'
+              );
+
+              router.replace('/Onboarding/sign-in');
+            } catch (error) {
+              console.error('Logout failed:', error);
+
+              Alert.alert(
+                'Logout Failed',
+                'Something went wrong while logging out. Please try again.'
+              );
+            }
           },
         },
       ]
