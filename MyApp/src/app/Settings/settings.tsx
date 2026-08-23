@@ -21,14 +21,12 @@ import { colors } from '@/constants/colours';
 const SETTINGS_STORAGE_KEY = '@suraksha_sms_settings';
 
 type Language = 'EN' | 'বাংলা';
-type AppTheme = 'Light' | 'Dark' | 'System';
 type ScanSensitivity = 'Low' | 'Balanced' | 'High';
 
 type StoredSettings = {
   dataSharingConsent: boolean;
   pushNotifications: boolean;
   language: Language;
-  appTheme: AppTheme;
   scanSensitivity: ScanSensitivity;
 };
 
@@ -36,7 +34,6 @@ const DEFAULT_SETTINGS: StoredSettings = {
   dataSharingConsent: true,
   pushNotifications: true,
   language: 'EN',
-  appTheme: 'Dark',
   scanSensitivity: 'High',
 };
 
@@ -130,31 +127,7 @@ export default function SettingsScreen() {
   };
 
   /*
-   * The Figma shows the current theme as a value on the right.
-   * Until a dedicated theme-selection screen exists, pressing the
-   * row cycles between Dark, Light and System.
-   */
-  const handleThemePress = () => {
-    const themes: AppTheme[] = [
-      'Dark',
-      'Light',
-      'System',
-    ];
-
-    const currentIndex = themes.indexOf(settings.appTheme);
-
-    const nextTheme =
-      themes[(currentIndex + 1) % themes.length];
-
-    updateSettings({
-      appTheme: nextTheme,
-    });
-  };
-
-  /*
-   * Same idea for Scan Sensitivity.
-   * This keeps the Settings screen functional without requiring a
-   * second screen that does not yet exist in the repository.
+   * Scan Sensitivity cycles between Low, Balanced and High.
    */
   const handleSensitivityPress = () => {
     const levels: ScanSensitivity[] = [
@@ -456,13 +429,7 @@ export default function SettingsScreen() {
             <View style={styles.divider} />
 
             {/* App theme */}
-            <TouchableOpacity
-              style={styles.preferenceRow}
-              onPress={handleThemePress}
-              disabled={!settingsLoaded}
-              accessibilityRole="button"
-              accessibilityLabel="Change app theme"
-            >
+            <View style={styles.preferenceRow}>
               <View style={styles.preferenceLeft}>
                 <View style={styles.settingIcon}>
                   <Ionicons
@@ -479,16 +446,10 @@ export default function SettingsScreen() {
 
               <View style={styles.valueContainer}>
                 <Text style={styles.valueText}>
-                  {settings.appTheme}
+                  Dark
                 </Text>
-
-                <Ionicons
-                  name="chevron-forward"
-                  size={18}
-                  color={colors.textMuted}
-                />
               </View>
-            </TouchableOpacity>
+            </View>
 
             <View style={styles.divider} />
 
@@ -612,19 +573,9 @@ export default function SettingsScreen() {
             Suraksha SMS • Made with ♥ for safer messaging
           </Text>
 
-          {/* Space for bottom navigation */}
           <View style={styles.bottomContentSpacing} />
         </ScrollView>
 
-        {/*
-         * Figma bottom navigation.
-         *
-         * This is kept local to this screen for now because the
-         * repository's shared AppTabs component currently contains
-         * only Home and Explore. It can later be moved into the
-         * team's shared navigation component once all five screens
-         * exist.
-         */}
         <View style={styles.bottomNav}>
           <BottomNavItem
             icon="home-outline"
