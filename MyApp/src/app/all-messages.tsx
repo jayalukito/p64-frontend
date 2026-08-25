@@ -9,9 +9,7 @@ import {
   View,
 } from 'react-native';
 
-/* =========================================================
-   TYPES
-========================================================= */
+import { router } from 'expo-router';
 
 type RiskType = 'High Risk' | 'Medium Risk' | 'Safe';
 
@@ -24,16 +22,12 @@ type MessageItem = {
   score: number;
 };
 
-/* =========================================================
-   MOCK MESSAGE DATA
-========================================================= */
-
 const messages: MessageItem[] = [
   {
     id: '1',
     sender: 'bKash Alert',
     time: '2 min ago',
-    text: 'Your account is locked. Click here to verify now...',
+    text: 'URGENT: Your account has been locked. Click here immediately to verify your identity or lose access.',
     risk: 'High Risk',
     score: 92,
   },
@@ -111,17 +105,9 @@ const messages: MessageItem[] = [
   },
 ];
 
-/* =========================================================
-   SCREEN
-========================================================= */
-
 export default function AllMessagesScreen() {
   const [activeFilter, setActiveFilter] = useState('All');
   const [search, setSearch] = useState('');
-
-  /* =======================================================
-     SEARCH + FILTER
-  ======================================================= */
 
   const filteredMessages = useMemo(() => {
     const searchText = search.trim().toLowerCase();
@@ -149,45 +135,49 @@ export default function AllMessagesScreen() {
     });
   }, [search, activeFilter]);
 
-  /* =======================================================
-     RISK COLOURS
-  ======================================================= */
-
   const getRiskColor = (risk: RiskType) => {
-    switch (risk) {
-      case 'High Risk':
-        return '#FF2F68';
-
-      case 'Medium Risk':
-        return '#FFB800';
-
-      case 'Safe':
-        return '#13D67A';
-
-      default:
-        return '#FFFFFF';
-    }
+    if (risk === 'High Risk') return '#FF2F68';
+    if (risk === 'Medium Risk') return '#FFB800';
+    return '#13D67A';
   };
 
   const getRiskBackground = (risk: RiskType) => {
-    switch (risk) {
-      case 'High Risk':
-        return '#341327';
-
-      case 'Medium Risk':
-        return '#352804';
-
-      case 'Safe':
-        return '#0C3125';
-
-      default:
-        return '#0D1B4D';
-    }
+    if (risk === 'High Risk') return '#341327';
+    if (risk === 'Medium Risk') return '#352804';
+    return '#0C3125';
   };
 
-  /* =======================================================
-     UI
-  ======================================================= */
+  const openMessage = (message: MessageItem) => {
+    const params = {
+      id: message.id,
+      sender: message.sender,
+      time: message.time,
+      text: message.text,
+      risk: message.risk,
+      score: message.score.toString(),
+    };
+
+    if (message.risk === 'High Risk') {
+      router.push({
+        pathname: '/alert-warning',
+        params,
+      });
+      return;
+    }
+
+    if (message.risk === 'Medium Risk') {
+      router.push({
+        pathname: '/medium-risk-detail',
+        params,
+      });
+      return;
+    }
+
+    router.push({
+      pathname: '/safe-message-detail',
+      params,
+    });
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -197,24 +187,16 @@ export default function AllMessagesScreen() {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        {/* ================= HEADER ================= */}
-
         <View style={styles.header}>
-          <Text style={styles.title}>
-            All Messages
-          </Text>
+          <Text style={styles.title}>All Messages</Text>
 
           <Text style={styles.subtitle}>
             View and manage all scanned SMS
           </Text>
         </View>
 
-        {/* ================= SEARCH ================= */}
-
         <View style={styles.searchContainer}>
-          <Text style={styles.searchIcon}>
-            ⌕
-          </Text>
+          <Text style={styles.searchIcon}>⌕</Text>
 
           <TextInput
             value={search}
@@ -225,229 +207,160 @@ export default function AllMessagesScreen() {
           />
         </View>
 
-        {/* ================= FILTERS ================= */}
-
         <View style={styles.filterRow}>
-          {['All', 'Safe', 'Medium', 'High'].map(
-            (filter) => {
-              const isActive =
-                activeFilter === filter;
-
-              return (
-                <TouchableOpacity
-                  key={filter}
-                  activeOpacity={0.8}
-                  onPress={() =>
-                    setActiveFilter(filter)
-                  }
-                  style={[
-                    styles.filterButton,
-
-                    filter === 'Safe' &&
-                      styles.safeFilter,
-
-                    filter === 'Medium' &&
-                      styles.mediumFilter,
-
-                    filter === 'High' &&
-                      styles.highFilter,
-
-                    isActive &&
-                      filter === 'All' &&
-                      styles.allFilterActive,
-
-                    isActive &&
-                      filter === 'Safe' &&
-                      styles.safeFilterActive,
-
-                    isActive &&
-                      filter === 'Medium' &&
-                      styles.mediumFilterActive,
-
-                    isActive &&
-                      filter === 'High' &&
-                      styles.highFilterActive,
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.filterText,
-
-                      filter === 'Safe' &&
-                        styles.safeText,
-
-                      filter === 'Medium' &&
-                        styles.mediumText,
-
-                      filter === 'High' &&
-                        styles.highText,
-
-                      isActive &&
-                        filter === 'All' &&
-                        styles.activeFilterText,
-                    ]}
-                  >
-                    {filter === 'High'
-                      ? 'High Risk'
-                      : filter}
-                  </Text>
-                </TouchableOpacity>
-              );
-            }
-          )}
-        </View>
-
-        {/* ================= MESSAGES ================= */}
-
-        <View style={styles.messageList}>
-          {filteredMessages.map((message) => {
-            const riskColor =
-              getRiskColor(message.risk);
-
-            const riskBackground =
-              getRiskBackground(message.risk);
+          {['All', 'Safe', 'Medium', 'High'].map((filter) => {
+            const isActive = activeFilter === filter;
 
             return (
               <TouchableOpacity
-                key={message.id}
-                style={styles.card}
-                activeOpacity={0.85}
+                key={filter}
+                activeOpacity={0.8}
+                onPress={() => setActiveFilter(filter)}
+                style={[
+                  styles.filterButton,
+
+                  filter === 'Safe' && styles.safeFilter,
+                  filter === 'Medium' && styles.mediumFilter,
+                  filter === 'High' && styles.highFilter,
+
+                  isActive &&
+                    filter === 'All' &&
+                    styles.allFilterActive,
+
+                  isActive &&
+                    filter === 'Safe' &&
+                    styles.safeFilterActive,
+
+                  isActive &&
+                    filter === 'Medium' &&
+                    styles.mediumFilterActive,
+
+                  isActive &&
+                    filter === 'High' &&
+                    styles.highFilterActive,
+                ]}
               >
-                {/* CARD HEADER */}
+                <Text
+                  style={[
+                    styles.filterText,
+                    filter === 'Safe' && styles.safeText,
+                    filter === 'Medium' && styles.mediumText,
+                    filter === 'High' && styles.highText,
 
-                <View style={styles.cardHeader}>
-                  <View style={styles.senderSection}>
-                    {/* MESSAGE ICON */}
-
-                    <View
-                      style={[
-                        styles.messageIconContainer,
-                        {
-                          backgroundColor:
-                            riskBackground,
-
-                          borderColor:
-                            riskColor,
-                        },
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.messageIcon,
-                          {
-                            color:
-                              riskColor,
-                          },
-                        ]}
-                      >
-                        ✉
-                      </Text>
-                    </View>
-
-                    {/* SENDER INFORMATION */}
-
-                    <View
-                      style={
-                        styles.senderTextContainer
-                      }
-                    >
-                      <Text style={styles.sender}>
-                        {message.sender}
-                      </Text>
-
-                      <Text style={styles.time}>
-                        {message.time}
-                      </Text>
-                    </View>
-                  </View>
-
-                  {/* RISK BADGE */}
-
-                  <View
-                    style={[
-                      styles.riskBadge,
-                      {
-                        backgroundColor:
-                          riskBackground,
-
-                        borderColor:
-                          riskColor,
-                      },
-                    ]}
-                  >
-                    <View
-                      style={[
-                        styles.riskDot,
-                        {
-                          backgroundColor:
-                            riskColor,
-                        },
-                      ]}
-                    />
-
-                    <Text
-                      style={[
-                        styles.riskBadgeText,
-                        {
-                          color:
-                            riskColor,
-                        },
-                      ]}
-                    >
-                      {message.risk}
-                    </Text>
-                  </View>
-                </View>
-
-                {/* MESSAGE PREVIEW */}
-
-                <Text style={styles.messageText}>
-                  {message.text}
+                    isActive &&
+                      filter === 'All' &&
+                      styles.activeFilterText,
+                  ]}
+                >
+                  {filter === 'High' ? 'High Risk' : filter}
                 </Text>
-
-                {/* SCORE */}
-
-                <View style={styles.cardBottom}>
-                  <View
-                    style={styles.progressTrack}
-                  >
-                    <View
-                      style={[
-                        styles.progressFill,
-                        {
-                          width: `${message.score}%`,
-                          backgroundColor:
-                            riskColor,
-                        },
-                      ]}
-                    />
-                  </View>
-
-                  <Text
-                    style={[
-                      styles.score,
-                      {
-                        color:
-                          riskColor,
-                      },
-                    ]}
-                  >
-                    Score: {message.score}/100
-                  </Text>
-                </View>
               </TouchableOpacity>
             );
           })}
         </View>
 
-        {/* ================= EMPTY RESULT ================= */}
+        {filteredMessages.map((message) => {
+          const riskColor = getRiskColor(message.risk);
+          const riskBackground = getRiskBackground(message.risk);
+
+          return (
+            <TouchableOpacity
+              key={message.id}
+              style={styles.card}
+              activeOpacity={0.85}
+              onPress={() => openMessage(message)}
+            >
+              <View style={styles.cardHeader}>
+                <View style={styles.senderSection}>
+                  <View
+                    style={[
+                      styles.messageIconContainer,
+                      {
+                        backgroundColor: riskBackground,
+                        borderColor: riskColor,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.messageIcon,
+                        { color: riskColor },
+                      ]}
+                    >
+                      ✉
+                    </Text>
+                  </View>
+
+                  <View style={styles.senderTextContainer}>
+                    <Text style={styles.sender}>
+                      {message.sender}
+                    </Text>
+
+                    <Text style={styles.time}>
+                      {message.time}
+                    </Text>
+                  </View>
+                </View>
+
+                <View
+                  style={[
+                    styles.riskBadge,
+                    {
+                      backgroundColor: riskBackground,
+                      borderColor: riskColor,
+                    },
+                  ]}
+                >
+                  <View
+                    style={[
+                      styles.riskDot,
+                      { backgroundColor: riskColor },
+                    ]}
+                  />
+
+                  <Text
+                    style={[
+                      styles.riskBadgeText,
+                      { color: riskColor },
+                    ]}
+                  >
+                    {message.risk}
+                  </Text>
+                </View>
+              </View>
+
+              <Text style={styles.messageText}>
+                {message.text}
+              </Text>
+
+              <View style={styles.cardBottom}>
+                <View style={styles.progressTrack}>
+                  <View
+                    style={[
+                      styles.progressFill,
+                      {
+                        width: `${message.score}%`,
+                        backgroundColor: riskColor,
+                      },
+                    ]}
+                  />
+                </View>
+
+                <Text
+                  style={[
+                    styles.score,
+                    { color: riskColor },
+                  ]}
+                >
+                  Score: {message.score}/100
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
 
         {filteredMessages.length === 0 && (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyIcon}>
-              ◌
-            </Text>
-
             <Text style={styles.emptyTitle}>
               No messages found
             </Text>
@@ -457,8 +370,6 @@ export default function AllMessagesScreen() {
             </Text>
           </View>
         )}
-
-        {/* ================= HINT ================= */}
 
         {filteredMessages.length > 0 && (
           <Text style={styles.tapHint}>
@@ -470,13 +381,7 @@ export default function AllMessagesScreen() {
   );
 }
 
-/* =========================================================
-   STYLES
-========================================================= */
-
 const styles = StyleSheet.create({
-  /* ================= SCREEN ================= */
-
   safeArea: {
     flex: 1,
     backgroundColor: '#06123D',
@@ -494,8 +399,6 @@ const styles = StyleSheet.create({
     paddingBottom: 35,
   },
 
-  /* ================= HEADER ================= */
-
   header: {
     marginBottom: 18,
   },
@@ -504,7 +407,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 27,
     fontWeight: '700',
-    letterSpacing: -0.3,
   },
 
   subtitle: {
@@ -513,21 +415,15 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 
-  /* ================= SEARCH ================= */
-
   searchContainer: {
     width: '100%',
     minHeight: 48,
-
     backgroundColor: '#0D1C4B',
-
     borderWidth: 1,
     borderColor: '#29417D',
     borderRadius: 15,
-
     flexDirection: 'row',
     alignItems: 'center',
-
     paddingHorizontal: 14,
   },
 
@@ -539,36 +435,25 @@ const styles = StyleSheet.create({
 
   searchInput: {
     flex: 1,
-
     color: '#FFFFFF',
-
     fontSize: 14,
-
     paddingVertical: 12,
   },
-
-  /* ================= FILTERS ================= */
 
   filterRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-
     gap: 9,
-
     marginTop: 15,
     marginBottom: 17,
   },
 
   filterButton: {
     borderRadius: 18,
-
     borderWidth: 1,
     borderColor: '#394C83',
-
     paddingHorizontal: 15,
     paddingVertical: 8,
-
-    backgroundColor: 'transparent',
   },
 
   allFilterActive: {
@@ -602,7 +487,6 @@ const styles = StyleSheet.create({
 
   filterText: {
     color: '#A1AAC3',
-
     fontSize: 12,
     fontWeight: '500',
   },
@@ -623,55 +507,35 @@ const styles = StyleSheet.create({
     color: '#FF2F68',
   },
 
-  /* ================= MESSAGE LIST ================= */
-
-  messageList: {
-    width: '100%',
-  },
-
   card: {
     width: '100%',
-
     backgroundColor: '#0D1B4D',
-
     borderWidth: 1,
     borderColor: '#1B3475',
     borderRadius: 18,
-
     padding: 15,
-
     marginBottom: 13,
   },
 
-  /* ================= CARD HEADER ================= */
-
   cardHeader: {
     flexDirection: 'row',
-
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
 
   senderSection: {
     flex: 1,
-
     flexDirection: 'row',
-
     paddingRight: 10,
   },
-
-  /* ================= ICON ================= */
 
   messageIconContainer: {
     width: 38,
     height: 38,
-
     borderRadius: 19,
     borderWidth: 1,
-
     justifyContent: 'center',
     alignItems: 'center',
-
     marginRight: 11,
   },
 
@@ -679,37 +543,27 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
 
-  /* ================= SENDER ================= */
-
   senderTextContainer: {
     flexShrink: 1,
   },
 
   sender: {
     color: '#FFFFFF',
-
     fontSize: 15,
     fontWeight: '700',
   },
 
   time: {
     color: '#7C89AD',
-
     fontSize: 11,
-
     marginTop: 3,
   },
 
-  /* ================= RISK BADGE ================= */
-
   riskBadge: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
     borderWidth: 1,
     borderRadius: 20,
-
     paddingHorizontal: 9,
     paddingVertical: 5,
   },
@@ -717,9 +571,7 @@ const styles = StyleSheet.create({
   riskDot: {
     width: 6,
     height: 6,
-
     borderRadius: 3,
-
     marginRight: 5,
   },
 
@@ -728,44 +580,30 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  /* ================= MESSAGE ================= */
-
   messageText: {
     color: '#AAB4D2',
-
     fontSize: 13,
     lineHeight: 19,
-
     marginTop: 14,
   },
 
-  /* ================= SCORE ================= */
-
   cardBottom: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
     marginTop: 13,
   },
 
   progressTrack: {
     flex: 1,
-
     height: 6,
-
     borderRadius: 10,
-
     backgroundColor: '#13213D',
-
     overflow: 'hidden',
-
     marginRight: 18,
   },
 
   progressFill: {
     height: '100%',
-
     borderRadius: 10,
   },
 
@@ -774,47 +612,27 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 
-  /* ================= EMPTY STATE ================= */
-
   emptyContainer: {
     paddingVertical: 50,
-
     alignItems: 'center',
-  },
-
-  emptyIcon: {
-    color: '#566589',
-
-    fontSize: 36,
-
-    marginBottom: 10,
   },
 
   emptyTitle: {
     color: '#FFFFFF',
-
     fontSize: 16,
     fontWeight: '600',
   },
 
   emptyText: {
     color: '#7C89AD',
-
     fontSize: 13,
-
     marginTop: 5,
   },
 
-  /* ================= HINT ================= */
-
   tapHint: {
     color: '#6F7A99',
-
     textAlign: 'center',
-
     fontSize: 11,
-
     marginTop: 4,
-    marginBottom: 10,
   },
 });
