@@ -154,7 +154,7 @@ export default function SettingsScreen() {
       return;
     }
 
-    router.replace('/Onboarding/home');
+    router.replace('/onboarding/home');
   };
 
   const handleEditProfile = () => {
@@ -203,7 +203,7 @@ export default function SettingsScreen() {
                 'accessToken'
               );
 
-              router.replace('/Onboarding/sign-in');
+              router.replace('/onboarding/sign-in');
             } catch (error) {
               console.error('Logout failed:', error);
 
@@ -219,7 +219,7 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    
       <View style={styles.screen}>
         <ScrollView
           style={styles.scrollView}
@@ -581,7 +581,7 @@ export default function SettingsScreen() {
             icon="home-outline"
             label="Home"
             onPress={() =>
-              router.replace('/Onboarding/home')
+              router.replace('/onboarding/home')
             }
           />
 
@@ -617,7 +617,6 @@ export default function SettingsScreen() {
           />
         </View>
       </View>
-    </SafeAreaView>
   );
 }
 
@@ -669,14 +668,9 @@ function showUnavailableScreen(screenName: string) {
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: colors.backgroundDark,
-  },
 
   screen: {
     flex: 1,
-    backgroundColor: colors.backgroundDark,
   },
 
   scrollView: {
