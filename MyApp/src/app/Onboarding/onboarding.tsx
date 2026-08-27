@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-export default function OnboardingScreen() {
+export default function onboardingScreen() {
   return (
     <View style={styles.screen}>
       <LinearGradient
@@ -61,14 +61,14 @@ export default function OnboardingScreen() {
             </Text>
 
             <View style={styles.footer}>
-              <Link href="/Onboarding/privacy" asChild>
+              <Link href="/onboarding/privacy" asChild>
                 <TouchableOpacity style={styles.button}>
                   <Text style={styles.buttonText}>Next</Text>
                   <Text style={styles.arrow}>→</Text>
                 </TouchableOpacity>
               </Link>
 
-              <Link href="/Onboarding/create-account" asChild>
+              <Link href="/onboarding/create-account" asChild>
                 <TouchableOpacity>
                   <Text style={styles.skip}>Skip for now</Text>
                 </TouchableOpacity>
