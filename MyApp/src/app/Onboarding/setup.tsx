@@ -1,5 +1,4 @@
 import { router } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
 import {
   View,
   Text,
@@ -7,15 +6,10 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import { Image } from 'react-native';
 
 export default function SetupScreen() {
   return (
-    <View style={styles.screen}>
-      <LinearGradient
-        colors={['#03091F', '#071640', '#081A4C', '#06143A', '#020817']}
-        locations={[0, 0.22, 0.48, 0.75, 1]}
-        style={styles.container}
-      >
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
@@ -31,13 +25,9 @@ export default function SetupScreen() {
               </View>
 
               <View style={styles.logoGlow}>
-                <LinearGradient colors={['#A78BFA', '#7C3AED']} style={styles.logoBox}>
-                  <Text style={styles.logo}>♢</Text>
-                </LinearGradient>
-              </View>
-
-              <View style={styles.progressOuter}>
-                <View style={styles.progressInner} />
+                 <View style={styles.logoBox}>
+                    <Image source={require('@/assets/images/onboarding/shield-check.png')} />
+                  </View>
               </View>
             </View>
 
@@ -78,8 +68,6 @@ export default function SetupScreen() {
             </View>
           </View>
         </ScrollView>
-      </LinearGradient>
-    </View>
   );
 }
 
@@ -215,7 +203,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#7C3AED',
+    shadowColor: '#7447F5',
     shadowOpacity: 0.55,
     shadowRadius: 24,
   },
@@ -365,4 +353,5 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     textAlign: 'center',
   },
+  
 });
