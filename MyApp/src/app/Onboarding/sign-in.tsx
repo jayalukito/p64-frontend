@@ -26,7 +26,7 @@ export default function SignInScreen() {
 
   const handleSignIn = async () => {
 
-    router.push( routes.onboarding.home )
+    router.push( routes.dashboard.home )
     // if (!email.trim()) {
     //   Alert.alert('Email Required', 'Please enter your email address.');
     //   return;
