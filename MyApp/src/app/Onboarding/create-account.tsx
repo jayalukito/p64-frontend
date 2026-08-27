@@ -1,5 +1,5 @@
 import { Link, router } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
+import  GradientBackground from '@/components/layout/GradientBackground';
 import { useState } from 'react';
 import {
   View,
@@ -11,12 +11,13 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
+  Image,
 } from 'react-native';
-
+import { routes } from '@/constants/routes';
 import FullScreenLoader from "@/components/loaders/FullScreenLoader";
-
 import axios from "axios"
+import PrimaryButton from '@/components/buttons/PrimaryButton';
 
 export default function CreateAccountScreen() {
   const [fullName, setFullName] = useState('');
@@ -53,88 +54,85 @@ export default function CreateAccountScreen() {
   };
 
   const handleCreateAccount = async () => {
-    const newErrors = {
-      fullName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      terms: '',
-    };
+    router.push(routes.onboarding.allowAccess)
+    // const newErrors = {
+    //   fullName: '',
+    //   email: '',
+    //   password: '',
+    //   confirmPassword: '',
+    //   terms: '',
+    // };
 
-    if (!fullName.trim()) {
-      newErrors.fullName = 'Full name is required.';
-    }
+    // if (!fullName.trim()) {
+    //   newErrors.fullName = 'Full name is required.';
+    // }
 
-    if (!email.trim()) {
-      newErrors.email = 'Email address is required.';
-    } else if (!emailValid) {
-      newErrors.email = 'Please enter a valid email address.';
-    }
+    // if (!email.trim()) {
+    //   newErrors.email = 'Email address is required.';
+    // } else if (!emailValid) {
+    //   newErrors.email = 'Please enter a valid email address.';
+    // }
 
-    if (!password.trim()) {
-      newErrors.password = 'Password is required.';
-    } else if (!passwordValid) {
-      newErrors.password = 'Password must include all required elements below.';
-    }
+    // if (!password.trim()) {
+    //   newErrors.password = 'Password is required.';
+    // } else if (!passwordValid) {
+    //   newErrors.password = 'Password must include all required elements below.';
+    // }
 
-    if (!confirmPassword.trim()) {
-      newErrors.confirmPassword = 'Please confirm your password.';
-    } else if (password !== confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match.';
-    }
+    // if (!confirmPassword.trim()) {
+    //   newErrors.confirmPassword = 'Please confirm your password.';
+    // } else if (password !== confirmPassword) {
+    //   newErrors.confirmPassword = 'Passwords do not match.';
+    // }
 
-    if (!acceptedTerms) {
-      newErrors.terms = 'You must agree to the Terms of Use and Privacy Policy.';
-    }
+    // if (!acceptedTerms) {
+    //   newErrors.terms = 'You must agree to the Terms of Use and Privacy Policy.';
+    // }
 
-    setErrors(newErrors);
+    // setErrors(newErrors);
 
-    const hasErrors = Object.values(newErrors).some((message) => message !== '');
+    // const hasErrors = Object.values(newErrors).some((message) => message !== '');
 
-    if (hasErrors) {
-      return;
-    }
+    // if (hasErrors) {
+    //   return;
+    // }
 
-    try{
+    // try{
 
-      setIsLoading(true);
-      const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+    //   setIsLoading(true);
+    //   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
-      const response = await axios.post(`${apiUrl}/auth/register`, {
-        name: fullName,
-        email: email,
-        password: password
-      })
+    //   const response = await axios.post(`${apiUrl}/auth/register`, {
+    //     name: fullName,
+    //     email: email,
+    //     password: password
+    //   })
 
-      const user = response.data.data.user;
-      const accessToken = response.data.data.accessToken;
+    //   const user = response.data.data.user;
+    //   const accessToken = response.data.data.accessToken;
 
-      if(response.data && accessToken){
-        console.log('Registration successful');
-        router.push('/Onboarding/allow-access');
-      }else{
-        Alert.alert('Registration failed', 'Please try again.');
-      }
-    }catch(error:any){
-      console.error("Login Error:",error);
+    //   if(response.data && accessToken){
+    //     console.log('Registration successful');
+    //     router.push('/onboarding/allow-access');
+    //   }else{
+    //     Alert.alert('Registration failed', 'Please try again.');
+    //   }
+    // }catch(error:any){
+    //   console.error("Login Error:",error);
 
-      const errorMessage = error.response?.data?.message;
-      console.error('Error message:',errorMessage);
-      Alert.alert('Registration failed', errorMessage);
-    }finally{
-      setIsLoading(false);
-    }
+    //   const errorMessage = error.response?.data?.message;
+    //   console.error('Error message:',errorMessage);
+    //   Alert.alert('Registration failed', errorMessage);
+    // }finally{
+    //   setIsLoading(false);
+    // }
     
   };
 
   return (
     <View style={styles.screen}>
       <FullScreenLoader visible={isLoading} message="Authenticating..." />
-      <LinearGradient
-        colors={['#03091F', '#071640', '#081A4C', '#06143A', '#020817']}
-        locations={[0, 0.22, 0.48, 0.75, 1]}
-        style={styles.container}
-      >
+      <GradientBackground >
         <KeyboardAvoidingView
           style={styles.keyboardView}
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -144,14 +142,14 @@ export default function CreateAccountScreen() {
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.scrollContent}
           >
-            <Link href="/Onboarding/privacy" asChild>
+            <Link href="/onboarding/privacy" asChild>
               <TouchableOpacity style={styles.backButton}>
                 <Text style={styles.backText}>‹</Text>
               </TouchableOpacity>
             </Link>
 
             <View style={styles.logoBox}>
-              <Text style={styles.logo}>♢</Text>
+              <Image source={require('@/assets/images/onboarding/shield-check.png')} />
             </View>
 
             <Text style={styles.appName}>Suraksha SMS</Text>
@@ -267,16 +265,12 @@ export default function CreateAccountScreen() {
               <Text style={styles.termsErrorText}>{errors.terms}</Text>
             ) : null}
 
-            <TouchableOpacity style={styles.primaryButton} onPress={handleCreateAccount}>
-              {isLoading ? (
-                <ActivityIndicator color="#FFFFFF" size="small" />
-              ) : (
-                <>
-                  <Text style={styles.primaryText}>Create Account</Text>
-                  <Text style={styles.arrow}>→</Text>
-                </>
-              )}
-            </TouchableOpacity>
+
+            {isLoading ? (
+              <ActivityIndicator color="#FFFFFF" size="small" />
+            ) : (
+              <PrimaryButton title="Create Account" onPress={handleCreateAccount} rightIcon={require('@/assets/images/onboarding/arrow-right.png')} />
+            )}
 
             <View style={styles.dividerRow}>
               <View style={styles.line} />
@@ -294,7 +288,7 @@ export default function CreateAccountScreen() {
               <Text style={styles.socialText}>Continue with Apple</Text>
             </TouchableOpacity>
 
-            <Link href="/Onboarding/sign-in" asChild>
+            <Link href="/onboarding/sign-in" asChild>
               <TouchableOpacity>
                 <Text style={styles.loginText}>
                   Already have an account?{' '}
@@ -304,7 +298,7 @@ export default function CreateAccountScreen() {
             </Link>
           </ScrollView>
         </KeyboardAvoidingView>
-      </LinearGradient>
+        </GradientBackground>
     </View>
   );
 }
@@ -526,18 +520,6 @@ const styles = StyleSheet.create({
     color: '#8B5CF6',
     fontWeight: '700',
   },
-  primaryButton: {
-    width: '100%',
-    height: 56,
-    borderRadius: 14,
-    backgroundColor: '#7C3AED',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    marginBottom: 16,
-    marginTop: 10,
-  },
   primaryText: {
     color: 'white',
     fontSize: 14,
@@ -548,6 +530,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
   },
   dividerRow: {
+    marginTop: 14,
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',

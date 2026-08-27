@@ -6,4 +6,9 @@ export const spacing = {
   xl: 24,
   xxl: 32,
   screenX: 28,
+
+  button: {
+    paddingHorizontal: 20,
+  }
+ 
 };
