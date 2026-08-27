@@ -8,7 +8,7 @@ export const colors = {
   card: '#111F44',
   cardDark: '#060D25',
   border: '#20335F',
-
+  
   purple: '#7C3AED',
   purpleLight: '#8B5CF6',
   purpleSoft: '#C7B8FF',
@@ -23,4 +23,6 @@ export const colors = {
   textSecondary: '#AEB8D6',
   textMuted: '#8D98BD',
   textDim: '#65729A',
+
+
 };

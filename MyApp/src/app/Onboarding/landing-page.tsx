@@ -1,66 +1,80 @@
 import { Link } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import {router} from "expo-router"
+import {routes} from "@/constants/routes";
+import PrimaryButton from '@/components/buttons/PrimaryButton';
+import SecondaryButton from '@/components/buttons/SecondaryButton';
+import SocialButton from '@/components/buttons/SocialButton';
 export default function LoginScreen() {
   return (
-    <View style={styles.screen}>
-      <LinearGradient
-        colors={['#03091F', '#071640', '#081A4C', '#06143A', '#020817']}
-        locations={[0, 0.22, 0.48, 0.75, 1]}
-        style={styles.container}
-      >
+    <View style= {styles.screen}>
+      <View style= {styles.container}>
         <View style={styles.logoBox}>
-          <Text style={styles.logo}>♢</Text>
+          <Image source={require('@/assets/images/onboarding/shield-check.png')} />
         </View>
 
         <Text style={styles.title}>Suraksha SMS</Text>
         <Text style={styles.badge}>Protecting you from SMS scams</Text>
 
-        <Link href="/Onboarding/sign-in" asChild>
-          <TouchableOpacity style={styles.primaryButton}>
-            <Text style={styles.primaryText}>Log In</Text>
-            <Text style={styles.arrow}>→</Text>
-          </TouchableOpacity>
-        </Link>
+        <View style={styles.buttongroup}>
+          <PrimaryButton title="Log In" onPress={() => {
+            // Handle log in button press
+            router.push(routes.onboarding.logIn);
+          }}
+          rightIcon= {require('@/assets/images/onboarding/arrow-right.png')}
+          />
 
-        <Link href="/Onboarding/onboarding" asChild>
-          <TouchableOpacity style={styles.secondaryButton}>
-            <Text style={styles.secondaryText}>♙  Create Account</Text>
-          </TouchableOpacity>
-        </Link>
+          <SocialButton provider="Google" onPress={() => {
+            // Handle sign up button press
+          }}
+          />
 
-        <TouchableOpacity style={styles.socialButton}>
-          <Text style={styles.google}>G</Text>
-          <Text style={styles.socialText}>Continue with Google</Text>
-        </TouchableOpacity>
+          <SocialButton provider="Apple" onPress={() => {
+            // Handle sign up button press
+          }}
+          />
 
-        <TouchableOpacity style={styles.socialButton}>
-          <Text style={styles.apple}></Text>
-          <Text style={styles.socialText}>Continue with Apple</Text>
-        </TouchableOpacity>
+          <View style = {styles.signup}>
+            <Text style = {styles.signupText}>Don't have an account? 
+              
+              <Link href={routes.onboarding.createAccount}>
+              <Text style = {styles.privacy}> Sign Up</Text>
+              </Link> 
+            </Text>
+          </View>
+        </View>
 
         <Text style={styles.terms}>
           By continuing, you agree to our{'\n'}Terms of Use and Privacy Policy.
         </Text>
 
         <Text style={styles.privacy}>♙  Your privacy is our priority</Text>
-      </LinearGradient>
     </View>
+    </View>
+
+
   );
 }
 
 const styles = StyleSheet.create({
+  signup: {
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  signupText: {
+    color: 'white',
+    fontSize: 12,
+  },
   screen: {
     flex: 1,
-    backgroundColor: '#1E1E1E',
-    alignItems: 'center',
+    width: '100%',
     justifyContent: 'center',
+    alignItems: 'center',
   },
+
   container: {
     width: '100%',
-    maxWidth: 390,
-    minHeight: 844,
+    maxWidth: 500,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 28,
@@ -97,84 +111,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 36,
   },
-  primaryButton: {
-    width: '100%',
-    height: 56,
-    borderRadius: 14,
-    backgroundColor: '#7C3AED',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    marginBottom: 12,
-  },
   primaryText: {
     color: 'white',
     fontWeight: '800',
     fontSize: 14,
-  },
-  arrow: {
-    color: 'white',
-    fontSize: 24,
-  },
-  secondaryButton: {
-    width: '100%',
-    height: 56,
-    borderRadius: 14,
-    backgroundColor: '#111F44',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#20335F',
-    marginBottom: 20,
-  },
-  secondaryText: {
-    color: '#DCE4FF',
-    fontWeight: '700',
-    fontSize: 13,
-  },
-  dividerRow: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 18,
-  },
-  line: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#20335F',
-  },
-  dividerText: {
-    color: '#52618A',
-    fontSize: 12,
-    marginHorizontal: 12,
-  },
-  socialButton: {
-    width: '100%',
-    height: 56,
-    borderRadius: 14,
-    backgroundColor: '#111F44',
-    borderWidth: 1,
-    borderColor: '#20335F',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    gap: 10,
-    marginBottom: 12,
-  },
-  google: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '900',
-  },
-  apple: {
-    color: 'white',
-    fontSize: 20,
-  },
-  socialText: {
-    color: 'white',
-    fontWeight: '700',
-    fontSize: 13,
   },
   terms: {
     color: '#56658E',
@@ -182,6 +122,11 @@ const styles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 17,
     marginTop: 10,
+  },
+  buttongroup:{
+    width: '100%',
+    flexDirection: 'column',
+    gap: 10
   },
   privacy: {
     color: '#8A63FF',
