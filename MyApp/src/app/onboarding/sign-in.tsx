@@ -82,7 +82,7 @@ export default function SignInScreen() {
          * Using replace prevents the user from pressing
          * Back and returning to Sign In after login.
          */
-        router.replace('/Onboarding/home');
+        router.replace('/onboarding/home');
       } else {
         Alert.alert(
           'Error',
