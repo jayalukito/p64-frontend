@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import {router} from "expo-router"
 import {routes} from "@/constants/routes";
 import PrimaryButton from '@/components/buttons/PrimaryButton';
@@ -10,7 +10,7 @@ export default function LoginScreen() {
     <View style= {styles.screen}>
       <View style= {styles.container}>
         <View style={styles.logoBox}>
-          <Text style={styles.logo}>♢</Text>
+          <Image source={require('@/assets/images/onboarding/shield-check.png')} />
         </View>
 
         <Text style={styles.title}>Suraksha SMS</Text>
@@ -19,9 +19,9 @@ export default function LoginScreen() {
         <View style={styles.buttongroup}>
           <PrimaryButton title="Log In" onPress={() => {
             // Handle log in button press
-            router.push(routes.logIn);
+            router.push(routes.onboarding.logIn);
           }}
-          rightIcon= "→"
+          rightIcon= {require('@/assets/images/onboarding/arrow-right.png')}
           />
 
           <SocialButton provider="Google" onPress={() => {
@@ -37,7 +37,7 @@ export default function LoginScreen() {
           <View style = {styles.signup}>
             <Text style = {styles.signupText}>Don't have an account? 
               
-              <Link href={routes.createAccount}>
+              <Link href={routes.onboarding.createAccount}>
               <Text style = {styles.privacy}> Sign Up</Text>
               </Link> 
             </Text>
