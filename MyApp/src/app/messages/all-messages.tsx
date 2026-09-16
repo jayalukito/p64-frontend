@@ -1,4 +1,6 @@
 import React, { useMemo, useState } from 'react';
+import { messages } from '../dummydata/dummydata';
+import { RiskType } from '@/types/messagetypes';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,111 +11,6 @@ import {
   View,
 } from 'react-native';
 
-/* =========================================================
-   TYPES
-========================================================= */
-
-type RiskType = 'High Risk' | 'Medium Risk' | 'Safe';
-
-type MessageItem = {
-  id: string;
-  sender: string;
-  time: string;
-  text: string;
-  risk: RiskType;
-  score: number;
-};
-
-/* =========================================================
-   MOCK MESSAGE DATA
-========================================================= */
-
-const messages: MessageItem[] = [
-  {
-    id: '1',
-    sender: 'bKash Alert',
-    time: '2 min ago',
-    text: 'Your account is locked. Click here to verify now...',
-    risk: 'High Risk',
-    score: 92,
-  },
-  {
-    id: '2',
-    sender: 'Unknown Number',
-    time: '10 min ago',
-    text: 'You have won a prize! Claim it before it expires...',
-    risk: 'Medium Risk',
-    score: 65,
-  },
-  {
-    id: '3',
-    sender: 'John',
-    time: '1 hour ago',
-    text: 'Hey, are we still meeting at 5 PM?',
-    risk: 'Safe',
-    score: 10,
-  },
-  {
-    id: '4',
-    sender: 'Bank Security',
-    time: '2 hours ago',
-    text: 'Unusual activity detected. Verify your account immediately...',
-    risk: 'High Risk',
-    score: 88,
-  },
-  {
-    id: '5',
-    sender: 'Delivery Service',
-    time: '3 hours ago',
-    text: 'Your package is waiting. Confirm your delivery information...',
-    risk: 'Medium Risk',
-    score: 58,
-  },
-  {
-    id: '6',
-    sender: 'Mum',
-    time: '4 hours ago',
-    text: 'Call me when you get home.',
-    risk: 'Safe',
-    score: 5,
-  },
-  {
-    id: '7',
-    sender: 'Prize Winner',
-    time: 'Yesterday',
-    text: 'Congratulations! You have been selected to receive a cash reward...',
-    risk: 'High Risk',
-    score: 95,
-  },
-  {
-    id: '8',
-    sender: 'Unknown Sender',
-    time: 'Yesterday',
-    text: 'Special offer available today only. Tap here to learn more...',
-    risk: 'Medium Risk',
-    score: 52,
-  },
-  {
-    id: '9',
-    sender: 'Sarah',
-    time: 'Yesterday',
-    text: 'Are you coming to class tomorrow?',
-    risk: 'Safe',
-    score: 8,
-  },
-  {
-    id: '10',
-    sender: 'University',
-    time: '2 days ago',
-    text: 'Reminder: Your class begins at 9:30 AM tomorrow.',
-    risk: 'Safe',
-    score: 3,
-  },
-];
-
-/* =========================================================
-   SCREEN
-========================================================= */
 
 export default function AllMessagesScreen() {
   const [activeFilter, setActiveFilter] = useState('All');
@@ -190,7 +87,6 @@ export default function AllMessagesScreen() {
   ======================================================= */
 
   return (
-    <SafeAreaView style={styles.safeArea}>
       <ScrollView
         style={styles.screen}
         contentContainerStyle={styles.scrollContent}
@@ -466,7 +362,7 @@ export default function AllMessagesScreen() {
           </Text>
         )}
       </ScrollView>
-    </SafeAreaView>
+
   );
 }
 
@@ -477,14 +373,9 @@ export default function AllMessagesScreen() {
 const styles = StyleSheet.create({
   /* ================= SCREEN ================= */
 
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#06123D',
-  },
-
   screen: {
     flex: 1,
-    backgroundColor: '#06123D',
+    paddingVertical: 20,
   },
 
   scrollContent: {
