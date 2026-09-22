@@ -9,7 +9,9 @@ export const routes = {
     setup: '/onboarding/setup',
    
   },
-
+  testing:{
+    mltest: '/ml/test',
+  },
   dashboard: {
     home:'/dashboard/home'
   },

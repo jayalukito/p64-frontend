@@ -1,0 +1,50 @@
+diff --git a/node_modules/onnxruntime-react-native/android/.gradle/8.7/checksums/checksums.lock b/node_modules/onnxruntime-react-native/android/.gradle/8.7/checksums/checksums.lock
+new file mode 100644
+index 0000000..5ff81a1
+Binary files /dev/null and b/node_modules/onnxruntime-react-native/android/.gradle/8.7/checksums/checksums.lock differ
+diff --git a/node_modules/onnxruntime-react-native/android/.gradle/8.7/dependencies-accessors/gc.properties b/node_modules/onnxruntime-react-native/android/.gradle/8.7/dependencies-accessors/gc.properties
+new file mode 100644
+index 0000000..e69de29
+diff --git a/node_modules/onnxruntime-react-native/android/.gradle/8.7/fileChanges/last-build.bin b/node_modules/onnxruntime-react-native/android/.gradle/8.7/fileChanges/last-build.bin
+new file mode 100644
+index 0000000..f76dd23
+Binary files /dev/null and b/node_modules/onnxruntime-react-native/android/.gradle/8.7/fileChanges/last-build.bin differ
+diff --git a/node_modules/onnxruntime-react-native/android/.gradle/8.7/fileHashes/fileHashes.bin b/node_modules/onnxruntime-react-native/android/.gradle/8.7/fileHashes/fileHashes.bin
+new file mode 100644
+index 0000000..5587da8
+Binary files /dev/null and b/node_modules/onnxruntime-react-native/android/.gradle/8.7/fileHashes/fileHashes.bin differ
+diff --git a/node_modules/onnxruntime-react-native/android/.gradle/8.7/fileHashes/fileHashes.lock b/node_modules/onnxruntime-react-native/android/.gradle/8.7/fileHashes/fileHashes.lock
+new file mode 100644
+index 0000000..69c10f9
+Binary files /dev/null and b/node_modules/onnxruntime-react-native/android/.gradle/8.7/fileHashes/fileHashes.lock differ
+diff --git a/node_modules/onnxruntime-react-native/android/.gradle/8.7/gc.properties b/node_modules/onnxruntime-react-native/android/.gradle/8.7/gc.properties
+new file mode 100644
+index 0000000..e69de29
+diff --git a/node_modules/onnxruntime-react-native/android/.gradle/buildOutputCleanup/buildOutputCleanup.lock b/node_modules/onnxruntime-react-native/android/.gradle/buildOutputCleanup/buildOutputCleanup.lock
+new file mode 100644
+index 0000000..1446a35
+Binary files /dev/null and b/node_modules/onnxruntime-react-native/android/.gradle/buildOutputCleanup/buildOutputCleanup.lock differ
+diff --git a/node_modules/onnxruntime-react-native/android/.gradle/buildOutputCleanup/cache.properties b/node_modules/onnxruntime-react-native/android/.gradle/buildOutputCleanup/cache.properties
+new file mode 100644
+index 0000000..c7f02c1
+--- /dev/null
++++ b/node_modules/onnxruntime-react-native/android/.gradle/buildOutputCleanup/cache.properties
+@@ -0,0 +1,2 @@
++#Tue Sep 22 19:28:52 AEST 2026
++gradle.version=8.7
+diff --git a/node_modules/onnxruntime-react-native/android/.gradle/vcs-1/gc.properties b/node_modules/onnxruntime-react-native/android/.gradle/vcs-1/gc.properties
+new file mode 100644
+index 0000000..e69de29
+diff --git a/node_modules/onnxruntime-react-native/android/build.gradle b/node_modules/onnxruntime-react-native/android/build.gradle
+index 41b4359..50126eb 100644
+--- a/node_modules/onnxruntime-react-native/android/build.gradle
++++ b/node_modules/onnxruntime-react-native/android/build.gradle
+@@ -247,7 +247,7 @@ dependencies {
+     extractLibs "com.microsoft.onnxruntime:onnxruntime-android:latest.integration@aar"
+   }
+ 
+-  if (VersionNumber.parse(REACT_NATIVE_VERSION) < VersionNumber.parse("0.71")) {
++  if (REACT_NATIVE_MINOR_VERSION < 71) {
+     extractLibs "com.facebook.fbjni:fbjni:+:headers"
+     extractLibs "com.facebook.fbjni:fbjni:+"
+   }
