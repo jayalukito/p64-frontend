@@ -1,6 +1,5 @@
 import { router } from "expo-router";
-import { routes } from "@/constants/routes";
-import { LinearGradient } from "expo-linear-gradient";
+import { useState } from "react";
 import {
   View,
   Text,
@@ -10,10 +9,42 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import { Image } from "react-native";
-
+import {requestSmsPermission, getSmsMessages} from "../../sms/sms-retrieval";
+import { classifySmsMessages, ClassifiedSmsMessage } from "../../ml/classifySmsMessages";
+import {useSmsStore} from "../../stores/useSmsStore";
 export default function AllowAccessScreen() {
-  const handleAllowAccess = () => {
-    router.push(routes.onboarding.setup);
+  const [error, setError] = useState<string | null>(null);
+  const [classifiedMessages, setClassifiedMessages] = useState<ClassifiedSmsMessage[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const smsStore = useSmsStore();
+    const handleAllowAccess = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const granted = await requestSmsPermission();
+
+      if (!granted) {
+        setError("SMS permission was not granted.");
+        return;
+      }
+
+      const smsMessages = await getSmsMessages(30);
+      const classified = await classifySmsMessages(smsMessages);
+      smsStore.setClassifiedMessages(classified);
+      smsStore.setRawMessages(smsMessages);
+
+      console.log("Classified SMS:", classified);
+    } catch (err: any) {
+      console.error(err);
+
+      setError(
+        err?.message ??
+          "Unable to retrieve SMS messages."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

@@ -11,7 +11,7 @@ import {
 
 import SmsReader, {
   SmsMessage,
-} from '../../modules/sms-reader/src/SmsReaderModule';
+} from '../../../modules/sms-reader/src/SmsReaderModule';
 
 export default function SmsTestScreen() {
   const [messages, setMessages] = useState<SmsMessage[]>([]);

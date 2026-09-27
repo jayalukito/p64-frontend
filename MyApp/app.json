@@ -26,6 +26,7 @@
     },
     "plugins": [
       "expo-router",
+      "./plugins/withOnnxRuntimeManualLink",
       [
         "expo-splash-screen",
         {
@@ -36,10 +37,11 @@
           }
         }
       ],
+       
       "expo-secure-store",
       "expo-image",
       "expo-web-browser",
-      "expo-asset"
+      "expo-asset",
       "expo-font",
       "expo-status-bar"
     ],

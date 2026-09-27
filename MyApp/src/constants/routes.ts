@@ -10,7 +10,8 @@ export const routes = {
    
   },
   testing:{
-    mltest: '/ml/test',
+    mltest: '/testing/test',
+    smsTest: '/testing/sms-test',
   },
   dashboard: {
     home:'/dashboard/home'
