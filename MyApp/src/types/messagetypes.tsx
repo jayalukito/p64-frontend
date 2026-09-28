@@ -1,4 +1,4 @@
-export type RiskType = 'High Risk' | 'Medium Risk' | 'Safe';
+export type RiskType = 'smish' | 'normal' | 'promo';
 export type MessageItem = {
   id: string;
   sender: string;

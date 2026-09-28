@@ -1,8 +1,7 @@
-import React, { useMemo, useState } from 'react';
-import { messages } from '../dummydata/dummydata';
+import React, { useMemo, useState, useEffect} from 'react';
 import { RiskType } from '@/types/messagetypes';
+import { useSmsStore } from '@/stores/useSmsStore';
 import {
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,31 +14,31 @@ import {
 export default function AllMessagesScreen() {
   const [activeFilter, setActiveFilter] = useState('All');
   const [search, setSearch] = useState('');
+  const messages = useSmsStore((state) => state.classifiedMessages);
 
   /* =======================================================
      SEARCH + FILTER
   ======================================================= */
-
   const filteredMessages = useMemo(() => {
     const searchText = search.trim().toLowerCase();
 
     return messages.filter((message) => {
       const matchesSearch =
         message.sender.toLowerCase().includes(searchText) ||
-        message.text.toLowerCase().includes(searchText);
+        message.mlResult.cleanedText.toLowerCase().includes(searchText);
 
       let matchesFilter = true;
 
-      if (activeFilter === 'Safe') {
-        matchesFilter = message.risk === 'Safe';
+      if (activeFilter === 'smish') {
+        matchesFilter = message.mlResult.label === 'smish';
       }
 
-      if (activeFilter === 'Medium') {
-        matchesFilter = message.risk === 'Medium Risk';
+      if (activeFilter === 'normal') {
+        matchesFilter = message.mlResult.label === 'normal';
       }
 
-      if (activeFilter === 'High') {
-        matchesFilter = message.risk === 'High Risk';
+      if (activeFilter === 'promo') {
+        matchesFilter = message.mlResult.label === 'promo';
       }
 
       return matchesSearch && matchesFilter;
@@ -52,13 +51,13 @@ export default function AllMessagesScreen() {
 
   const getRiskColor = (risk: RiskType) => {
     switch (risk) {
-      case 'High Risk':
+      case 'smish':
         return '#FF2F68';
 
-      case 'Medium Risk':
+      case 'promo':
         return '#FFB800';
 
-      case 'Safe':
+      case 'normal':
         return '#13D67A';
 
       default:
@@ -68,13 +67,13 @@ export default function AllMessagesScreen() {
 
   const getRiskBackground = (risk: RiskType) => {
     switch (risk) {
-      case 'High Risk':
+      case 'smish':
         return '#341327';
 
-      case 'Medium Risk':
+      case 'promo':
         return '#352804';
 
-      case 'Safe':
+      case 'normal':
         return '#0C3125';
 
       default:
@@ -124,7 +123,7 @@ export default function AllMessagesScreen() {
         {/* ================= FILTERS ================= */}
 
         <View style={styles.filterRow}>
-          {['All', 'Safe', 'Medium', 'High'].map(
+          {['All', 'normal', 'promo', 'smish'].map(
             (filter) => {
               const isActive =
                 activeFilter === filter;
@@ -139,13 +138,13 @@ export default function AllMessagesScreen() {
                   style={[
                     styles.filterButton,
 
-                    filter === 'Safe' &&
+                    filter === 'normal' &&
                       styles.safeFilter,
 
-                    filter === 'Medium' &&
+                    filter === 'promo' &&
                       styles.mediumFilter,
 
-                    filter === 'High' &&
+                    filter === 'smish' &&
                       styles.highFilter,
 
                     isActive &&
@@ -153,15 +152,15 @@ export default function AllMessagesScreen() {
                       styles.allFilterActive,
 
                     isActive &&
-                      filter === 'Safe' &&
+                      filter === 'normal' &&
                       styles.safeFilterActive,
 
                     isActive &&
-                      filter === 'Medium' &&
+                      filter === 'promo' &&
                       styles.mediumFilterActive,
 
                     isActive &&
-                      filter === 'High' &&
+                      filter === 'smish' &&
                       styles.highFilterActive,
                   ]}
                 >
@@ -169,13 +168,13 @@ export default function AllMessagesScreen() {
                     style={[
                       styles.filterText,
 
-                      filter === 'Safe' &&
+                      filter === 'normal' &&
                         styles.safeText,
 
-                      filter === 'Medium' &&
+                      filter === 'promo' &&
                         styles.mediumText,
 
-                      filter === 'High' &&
+                      filter === 'smish' &&
                         styles.highText,
 
                       isActive &&
@@ -183,8 +182,8 @@ export default function AllMessagesScreen() {
                         styles.activeFilterText,
                     ]}
                   >
-                    {filter === 'High'
-                      ? 'High Risk'
+                    {filter === 'smish'
+                      ? 'smish'
                       : filter}
                   </Text>
                 </TouchableOpacity>
@@ -198,10 +197,10 @@ export default function AllMessagesScreen() {
         <View style={styles.messageList}>
           {filteredMessages.map((message) => {
             const riskColor =
-              getRiskColor(message.risk);
+              getRiskColor(message.mlResult.label);
 
             const riskBackground =
-              getRiskBackground(message.risk);
+              getRiskBackground(message.mlResult.label);
 
             return (
               <TouchableOpacity
@@ -252,7 +251,7 @@ export default function AllMessagesScreen() {
                       </Text>
 
                       <Text style={styles.time}>
-                        {message.time}
+                        {message.date}
                       </Text>
                     </View>
                   </View>
@@ -290,7 +289,7 @@ export default function AllMessagesScreen() {
                         },
                       ]}
                     >
-                      {message.risk}
+                      {message.mlResult.label}
                     </Text>
                   </View>
                 </View>
@@ -298,7 +297,7 @@ export default function AllMessagesScreen() {
                 {/* MESSAGE PREVIEW */}
 
                 <Text style={styles.messageText}>
-                  {message.text}
+                  {message.body}
                 </Text>
 
                 {/* SCORE */}
@@ -311,7 +310,7 @@ export default function AllMessagesScreen() {
                       style={[
                         styles.progressFill,
                         {
-                          width: `${message.score}%`,
+                          width: `${message.mlResult.dangerScore}%`,
                           backgroundColor:
                             riskColor,
                         },
@@ -328,7 +327,7 @@ export default function AllMessagesScreen() {
                       },
                     ]}
                   >
-                    Score: {message.score}/100
+                    Score: {message.mlResult.dangerScore}/100
                   </Text>
                 </View>
               </TouchableOpacity>

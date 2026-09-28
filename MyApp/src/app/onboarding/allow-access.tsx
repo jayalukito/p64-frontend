@@ -7,46 +7,53 @@ import {
   TouchableOpacity,
   ScrollView,
   ImageSourcePropType,
+  Platform,
 } from "react-native";
 import { Image } from "react-native";
 import {requestSmsPermission, getSmsMessages} from "../../sms/sms-retrieval";
 import { classifySmsMessages, ClassifiedSmsMessage } from "../../ml/classifySmsMessages";
 import {useSmsStore} from "../../stores/useSmsStore";
+import { routes } from "../../constants/routes";
 export default function AllowAccessScreen() {
   const [error, setError] = useState<string | null>(null);
   const [classifiedMessages, setClassifiedMessages] = useState<ClassifiedSmsMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const smsStore = useSmsStore();
     const handleAllowAccess = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
+      if (Platform.OS === 'android'){
+        try {
+          setIsLoading(true);
+          setError(null);
 
-      const granted = await requestSmsPermission();
+          const granted = await requestSmsPermission();
 
-      if (!granted) {
-        setError("SMS permission was not granted.");
-        return;
+          if (!granted) {
+            setError("SMS permission was not granted.");
+            return;
+          }
+
+          const smsMessages = await getSmsMessages(30);
+          const classified = await classifySmsMessages(smsMessages);
+          smsStore.setClassifiedMessages(classified);
+          smsStore.setRawMessages(smsMessages);
+
+          console.log("Classified SMS:", classified);
+        } catch (err: any) {
+          console.error(err);
+
+          setError(
+            err?.message ??
+              "Unable to retrieve SMS messages."
+          );
+        } finally {
+          setIsLoading(false);
+          router.replace(routes.dashboard.home);
+        }
+      }else{
+        router.replace(routes.dashboard.home);
       }
-
-      const smsMessages = await getSmsMessages(30);
-      const classified = await classifySmsMessages(smsMessages);
-      smsStore.setClassifiedMessages(classified);
-      smsStore.setRawMessages(smsMessages);
-
-      console.log("Classified SMS:", classified);
-    } catch (err: any) {
-      console.error(err);
-
-      setError(
-        err?.message ??
-          "Unable to retrieve SMS messages."
-      );
-    } finally {
-      setIsLoading(false);
-    }
+     
   };
-
   return (
     <View style={styles.screen}>
       <ScrollView
