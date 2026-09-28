@@ -1,0 +1,10 @@
+diff --git a/node_modules/onnxruntime-react-native/unimodule.json b/node_modules/onnxruntime-react-native/unimodule.json
+deleted file mode 100644
+index c2bd3c0..0000000
+--- a/node_modules/onnxruntime-react-native/unimodule.json
++++ /dev/null
+@@ -1,4 +0,0 @@
+-{
+-  "name": "onnxruntime-react-native",
+-  "platforms": ["ios", "android"]
+-}

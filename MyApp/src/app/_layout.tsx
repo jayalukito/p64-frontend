@@ -1,17 +1,13 @@
-import {
-  DarkTheme,
-  Stack,
-  ThemeProvider,
-} from 'expo-router';
+import { DarkTheme, Stack, ThemeProvider } from "expo-router";
 
-import GradientBackground from '@/components/layout/GradientBackground';
+import GradientBackground from "@/components/layout/GradientBackground";
 
 const TransparentTheme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
-    background: 'transparent',
-    card: 'transparent',
+    background: "transparent",
+    card: "transparent",
   },
 };
 
@@ -23,7 +19,7 @@ export default function RootLayout() {
           screenOptions={{
             headerShown: false,
             contentStyle: {
-              backgroundColor: 'transparent',
+              backgroundColor: "transparent",
             },
           }}
         />
