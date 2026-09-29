@@ -84,6 +84,7 @@ export default function AllMessagesScreen() {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
+          style={styles.filterScroll}
           contentContainerStyle={styles.filterContainer}
         >
           {filters.map((item) => {
@@ -270,9 +271,14 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 
+  filterScroll: {
+  flexGrow: 0,
+  marginBottom: 15,
+},
+
   filterContainer: {
     gap: 8,
-    paddingBottom: 15,
+  
   },
 
   filterButton: {
