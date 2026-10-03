@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { ClassifiedSmsMessage, SmsMessage } from "../types/message.type";
+import { ClassifiedSmsMessage, FlaggedSmsMessage, SmsMessage } from "../types/message.type";
 
 
 type SmsStore = {
@@ -9,10 +9,10 @@ type SmsStore = {
   classifiedMessages: ClassifiedSmsMessage[];
 
   setRawMessages: (messages: SmsMessage[]) => void;
-  setClassifiedMessages: (messages: ClassifiedSmsMessage[]) => void;
+  setFlaggedMessages: (messages: FlaggedSmsMessage[]) => void;
 
   appendRawMessages: (messages: SmsMessage[]) => void;
-  appendClassifiedMessages: (messages: ClassifiedSmsMessage[]) => void;
+  appendFlaggedMessages: (messages: FlaggedSmsMessage[]) => void;
 
   clearMessages: () => void;
 };
@@ -46,7 +46,7 @@ export const useSmsStore = create<SmsStore>()(
       setRawMessages: (messages) => {
         set({ rawMessages: messages });
       },
-      setClassifiedMessages: (messages) => {
+      setFlaggedMessages: (messages) => {
         set({ classifiedMessages: messages });
       },
 
@@ -57,7 +57,7 @@ export const useSmsStore = create<SmsStore>()(
         }));
       },
 
-      appendClassifiedMessages: (messages) => {
+      appendFlaggedMessages: (messages) => {
         set((state) => ({
           classifiedMessages: mergeMessagesById(
             state.classifiedMessages,

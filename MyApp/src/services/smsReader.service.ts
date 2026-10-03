@@ -11,7 +11,7 @@ import SmsReader, {
 
 import {
   MLSmsMessage,
-} from '../ml/classifySmsMessages';
+} from '@/types/message.type';
 export async function requestSmsPermission(): Promise<boolean> {
   if (Platform.OS !== 'android') {
     throw new Error(
@@ -33,7 +33,7 @@ export async function requestSmsPermission(): Promise<boolean> {
   return result === PermissionsAndroid.RESULTS.GRANTED;
 }
 
-export async function getSmsMessages(limit = 30): Promise<MLSmsMessage[]> {
+export async function getSmsMessages(limit: number): Promise<MLSmsMessage[]> {
   const messages: SmsMessage[] = await SmsReader.getMessages(limit);
 
   const validMessages: MLSmsMessage[] = messages

@@ -1,3 +1,5 @@
+import { FinalRiskResult } from "./risk.type";
+
 export type RiskType = 'smish' | 'normal' | 'promo';
 export type MessageItem = {
   id: string;
@@ -48,4 +50,8 @@ export type SmsPredictionResult = {
     promo: number;
     smish: number;
   };
+};
+
+export type FlaggedSmsMessage = ClassifiedSmsMessage & {
+  finalRisk: FinalRiskResult;
 };
