@@ -1,6 +1,6 @@
-import React, { useMemo, useState, useEffect} from 'react';
-import { RiskType } from '@/types/messagetypes';
-import { useSmsStore } from '@/stores/useSmsStore';
+import React, { useMemo, useState, useEffect } from "react";
+import { RiskType } from "@/types/message.type";
+import { useSmsStore } from "@/stores/useSmsStore";
 import {
   ScrollView,
   StyleSheet,
@@ -8,12 +8,12 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
-
+} from "react-native";
+import { typography } from "@/constants/typography";
 
 export default function AllMessagesScreen() {
-  const [activeFilter, setActiveFilter] = useState('All');
-  const [search, setSearch] = useState('');
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [search, setSearch] = useState("");
   const messages = useSmsStore((state) => state.classifiedMessages);
 
   /* =======================================================
@@ -29,21 +29,21 @@ export default function AllMessagesScreen() {
 
       let matchesFilter = true;
 
-      if (activeFilter === 'smish') {
-        matchesFilter = message.mlResult.label === 'smish';
+      if (activeFilter === "smish") {
+        matchesFilter = message.mlResult.label === "smish";
       }
 
-      if (activeFilter === 'normal') {
-        matchesFilter = message.mlResult.label === 'normal';
+      if (activeFilter === "normal") {
+        matchesFilter = message.mlResult.label === "normal";
       }
 
-      if (activeFilter === 'promo') {
-        matchesFilter = message.mlResult.label === 'promo';
+      if (activeFilter === "promo") {
+        matchesFilter = message.mlResult.label === "promo";
       }
 
       return matchesSearch && matchesFilter;
     });
-  }, [search, activeFilter]);
+  }, [search, activeFilter, search]);
 
   /* =======================================================
      RISK COLOURS
@@ -51,33 +51,33 @@ export default function AllMessagesScreen() {
 
   const getRiskColor = (risk: RiskType) => {
     switch (risk) {
-      case 'smish':
-        return '#FF2F68';
+      case "smish":
+        return "#FF2F68";
 
-      case 'promo':
-        return '#FFB800';
+      case "promo":
+        return "#FFB800";
 
-      case 'normal':
-        return '#13D67A';
+      case "normal":
+        return "#13D67A";
 
       default:
-        return '#FFFFFF';
+        return "#FFFFFF";
     }
   };
 
   const getRiskBackground = (risk: RiskType) => {
     switch (risk) {
-      case 'smish':
-        return '#341327';
+      case "smish":
+        return "#341327";
 
-      case 'promo':
-        return '#352804';
+      case "promo":
+        return "#352804";
 
-      case 'normal':
-        return '#0C3125';
+      case "normal":
+        return "#0C3125";
 
       default:
-        return '#0D1B4D';
+        return "#0D1B4D";
     }
   };
 
@@ -86,282 +86,221 @@ export default function AllMessagesScreen() {
   ======================================================= */
 
   return (
-      <ScrollView
-        style={styles.screen}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-      >
-        {/* ================= HEADER ================= */}
+    <ScrollView
+      style={styles.screen}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
+    >
+      {/* ================= HEADER ================= */}
 
-        <View style={styles.header}>
-          <Text style={styles.title}>
-            All Messages
-          </Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>All Messages</Text>
 
-          <Text style={styles.subtitle}>
-            View and manage all scanned SMS
-          </Text>
-        </View>
+        <Text style={styles.subtitle}>View and manage all scanned SMS</Text>
+      </View>
 
-        {/* ================= SEARCH ================= */}
+      {/* ================= SEARCH ================= */}
 
-        <View style={styles.searchContainer}>
-          <Text style={styles.searchIcon}>
-            ⌕
-          </Text>
+      <View style={styles.searchContainer}>
+        <Text style={styles.searchIcon}>⌕</Text>
 
-          <TextInput
-            value={search}
-            onChangeText={setSearch}
-            placeholder="Search messages..."
-            placeholderTextColor="#7885A9"
-            style={styles.searchInput}
-          />
-        </View>
+        <TextInput
+          value={search}
+          onChangeText={setSearch}
+          placeholder="Search messages..."
+          placeholderTextColor="#7885A9"
+          style={styles.searchInput}
+        />
+      </View>
 
-        {/* ================= FILTERS ================= */}
+      {/* ================= FILTERS ================= */}
 
-        <View style={styles.filterRow}>
-          {['All', 'normal', 'promo', 'smish'].map(
-            (filter) => {
-              const isActive =
-                activeFilter === filter;
+      <View style={styles.filterRow}>
+        {["All", "normal", "promo", "smish"].map((filter) => {
+          const isActive = activeFilter === filter;
 
-              return (
-                <TouchableOpacity
-                  key={filter}
-                  activeOpacity={0.8}
-                  onPress={() =>
-                    setActiveFilter(filter)
-                  }
-                  style={[
-                    styles.filterButton,
+          return (
+            <TouchableOpacity
+              key={filter}
+              activeOpacity={0.8}
+              onPress={() => setActiveFilter(filter)}
+              style={[
+                styles.filterButton,
 
-                    filter === 'normal' &&
-                      styles.safeFilter,
+                filter === "normal" && styles.safeFilter,
 
-                    filter === 'promo' &&
-                      styles.mediumFilter,
+                filter === "promo" && styles.mediumFilter,
 
-                    filter === 'smish' &&
-                      styles.highFilter,
+                filter === "smish" && styles.highFilter,
 
-                    isActive &&
-                      filter === 'All' &&
-                      styles.allFilterActive,
+                isActive && filter === "All" && styles.allFilterActive,
 
-                    isActive &&
-                      filter === 'normal' &&
-                      styles.safeFilterActive,
+                isActive && filter === "normal" && styles.safeFilterActive,
 
-                    isActive &&
-                      filter === 'promo' &&
-                      styles.mediumFilterActive,
+                isActive && filter === "promo" && styles.mediumFilterActive,
 
-                    isActive &&
-                      filter === 'smish' &&
-                      styles.highFilterActive,
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.filterText,
+                isActive && filter === "smish" && styles.highFilterActive,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.filterText,
 
-                      filter === 'normal' &&
-                        styles.safeText,
+                  filter === "normal" && styles.safeText,
 
-                      filter === 'promo' &&
-                        styles.mediumText,
+                  filter === "promo" && styles.mediumText,
 
-                      filter === 'smish' &&
-                        styles.highText,
+                  filter === "smish" && styles.highText,
 
-                      isActive &&
-                        filter === 'All' &&
-                        styles.activeFilterText,
-                    ]}
-                  >
-                    {filter === 'smish'
-                      ? 'smish'
-                      : filter}
-                  </Text>
-                </TouchableOpacity>
-              );
-            }
-          )}
-        </View>
-
-        {/* ================= MESSAGES ================= */}
-
-        <View style={styles.messageList}>
-          {filteredMessages.map((message) => {
-            const riskColor =
-              getRiskColor(message.mlResult.label);
-
-            const riskBackground =
-              getRiskBackground(message.mlResult.label);
-
-            return (
-              <TouchableOpacity
-                key={message.id}
-                style={styles.card}
-                activeOpacity={0.85}
+                  isActive && filter === "All" && styles.activeFilterText,
+                ]}
               >
-                {/* CARD HEADER */}
+                {filter === "smish" ? "smish" : filter}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
 
-                <View style={styles.cardHeader}>
-                  <View style={styles.senderSection}>
-                    {/* MESSAGE ICON */}
+      {/* ================= MESSAGES ================= */}
 
-                    <View
-                      style={[
-                        styles.messageIconContainer,
-                        {
-                          backgroundColor:
-                            riskBackground,
+      <View style={styles.messageList}>
+        {filteredMessages.map((message) => {
+          const riskColor = getRiskColor(message.mlResult.label);
 
-                          borderColor:
-                            riskColor,
-                        },
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.messageIcon,
-                          {
-                            color:
-                              riskColor,
-                          },
-                        ]}
-                      >
-                        ✉
-                      </Text>
-                    </View>
+          const riskBackground = getRiskBackground(message.mlResult.label);
 
-                    {/* SENDER INFORMATION */}
+          return (
+            <TouchableOpacity
+              key={message.id}
+              style={styles.card}
+              activeOpacity={0.85}
+            >
+              {/* CARD HEADER */}
 
-                    <View
-                      style={
-                        styles.senderTextContainer
-                      }
-                    >
-                      <Text style={styles.sender}>
-                        {message.sender}
-                      </Text>
-
-                      <Text style={styles.time}>
-                        {message.date}
-                      </Text>
-                    </View>
-                  </View>
-
-                  {/* RISK BADGE */}
+              <View style={styles.cardHeader}>
+                <View style={styles.senderSection}>
+                  {/* MESSAGE ICON */}
 
                   <View
                     style={[
-                      styles.riskBadge,
+                      styles.messageIconContainer,
                       {
-                        backgroundColor:
-                          riskBackground,
+                        backgroundColor: riskBackground,
 
-                        borderColor:
-                          riskColor,
+                        borderColor: riskColor,
                       },
                     ]}
                   >
-                    <View
-                      style={[
-                        styles.riskDot,
-                        {
-                          backgroundColor:
-                            riskColor,
-                        },
-                      ]}
-                    />
-
                     <Text
                       style={[
-                        styles.riskBadgeText,
+                        styles.messageIcon,
                         {
-                          color:
-                            riskColor,
+                          color: riskColor,
                         },
                       ]}
                     >
-                      {message.mlResult.label}
+                      ✉
                     </Text>
+                  </View>
+
+                  {/* SENDER INFORMATION */}
+
+                  <View style={styles.senderTextContainer}>
+                    <Text style={styles.sender}>{message.sender}</Text>
+
+                    <Text style={styles.time}>{message.date}</Text>
                   </View>
                 </View>
 
-                {/* MESSAGE PREVIEW */}
+                {/* RISK BADGE */}
 
-                <Text style={styles.messageText}>
-                  {message.body}
-                </Text>
+                <View
+                  style={[
+                    styles.riskBadge,
+                    {
+                      backgroundColor: riskBackground,
 
-                {/* SCORE */}
-
-                <View style={styles.cardBottom}>
+                      borderColor: riskColor,
+                    },
+                  ]}
+                >
                   <View
-                    style={styles.progressTrack}
-                  >
-                    <View
-                      style={[
-                        styles.progressFill,
-                        {
-                          width: `${message.mlResult.dangerScore}%`,
-                          backgroundColor:
-                            riskColor,
-                        },
-                      ]}
-                    />
-                  </View>
+                    style={[
+                      styles.riskDot,
+                      {
+                        backgroundColor: riskColor,
+                      },
+                    ]}
+                  />
 
                   <Text
                     style={[
-                      styles.score,
+                      styles.riskBadgeText,
                       {
-                        color:
-                          riskColor,
+                        color: riskColor,
                       },
                     ]}
                   >
-                    Score: {message.mlResult.dangerScore}/100
+                    {message.mlResult.label}
                   </Text>
                 </View>
-              </TouchableOpacity>
-            );
-          })}
+              </View>
+
+              {/* MESSAGE PREVIEW */}
+
+              <Text style={styles.messageText}>{message.body}</Text>
+
+              {/* SCORE */}
+
+              <View style={styles.cardBottom}>
+                <View style={styles.progressTrack}>
+                  <View
+                    style={[
+                      styles.progressFill,
+                      {
+                        width: `${message.mlResult.dangerScore}%`,
+                        backgroundColor: riskColor,
+                      },
+                    ]}
+                  />
+                </View>
+
+                <Text
+                  style={[
+                    styles.score,
+                    {
+                      color: riskColor,
+                    },
+                  ]}
+                >
+                  Score: {message.mlResult.dangerScore}/100
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+
+      {/* ================= EMPTY RESULT ================= */}
+
+      {filteredMessages.length === 0 && (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyIcon}>◌</Text>
+
+          <Text style={styles.emptyTitle}>No messages found</Text>
+
+          <Text style={styles.emptyText}>Try another search or filter.</Text>
         </View>
+      )}
 
-        {/* ================= EMPTY RESULT ================= */}
+      {/* ================= HINT ================= */}
 
-        {filteredMessages.length === 0 && (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyIcon}>
-              ◌
-            </Text>
-
-            <Text style={styles.emptyTitle}>
-              No messages found
-            </Text>
-
-            <Text style={styles.emptyText}>
-              Try another search or filter.
-            </Text>
-          </View>
-        )}
-
-        {/* ================= HINT ================= */}
-
-        {filteredMessages.length > 0 && (
-          <Text style={styles.tapHint}>
-            Tap a message to view full details
-          </Text>
-        )}
-      </ScrollView>
-
+      {filteredMessages.length > 0 && (
+        <Text style={styles.tapHint}>Tap a message to view full details</Text>
+      )}
+    </ScrollView>
   );
 }
 
@@ -391,14 +330,14 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: '#FFFFFF',
-    fontSize: 27,
-    fontWeight: '700',
+    color: "#FFFFFF",
+    fontSize: typography.title.fontSize,
+    fontWeight: typography.title.fontWeight,
     letterSpacing: -0.3,
   },
 
   subtitle: {
-    color: '#8C98B9',
+    color: "#8C98B9",
     fontSize: 13,
     marginTop: 4,
   },
@@ -406,23 +345,23 @@ const styles = StyleSheet.create({
   /* ================= SEARCH ================= */
 
   searchContainer: {
-    width: '100%',
+    width: "100%",
     minHeight: 48,
 
-    backgroundColor: '#0D1C4B',
+    backgroundColor: "#0D1C4B",
 
     borderWidth: 1,
-    borderColor: '#29417D',
+    borderColor: "#29417D",
     borderRadius: 15,
 
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
 
     paddingHorizontal: 14,
   },
 
   searchIcon: {
-    color: '#7E8BB0',
+    color: "#7E8BB0",
     fontSize: 22,
     marginRight: 10,
   },
@@ -430,7 +369,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
 
-    color: '#FFFFFF',
+    color: "#FFFFFF",
 
     fontSize: 14,
 
@@ -440,8 +379,8 @@ const styles = StyleSheet.create({
   /* ================= FILTERS ================= */
 
   filterRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
 
     gap: 9,
 
@@ -453,79 +392,79 @@ const styles = StyleSheet.create({
     borderRadius: 18,
 
     borderWidth: 1,
-    borderColor: '#394C83',
+    borderColor: "#394C83",
 
     paddingHorizontal: 15,
     paddingVertical: 8,
 
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
 
   allFilterActive: {
-    backgroundColor: '#5C47DA',
-    borderColor: '#5C47DA',
+    backgroundColor: "#5C47DA",
+    borderColor: "#5C47DA",
   },
 
   safeFilter: {
-    borderColor: '#13D67A',
+    borderColor: "#13D67A",
   },
 
   mediumFilter: {
-    borderColor: '#FFB800',
+    borderColor: "#FFB800",
   },
 
   highFilter: {
-    borderColor: '#FF2F68',
+    borderColor: "#FF2F68",
   },
 
   safeFilterActive: {
-    backgroundColor: '#0C3125',
+    backgroundColor: "#0C3125",
   },
 
   mediumFilterActive: {
-    backgroundColor: '#352804',
+    backgroundColor: "#352804",
   },
 
   highFilterActive: {
-    backgroundColor: '#341327',
+    backgroundColor: "#341327",
   },
 
   filterText: {
-    color: '#A1AAC3',
+    color: "#A1AAC3",
 
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: "500",
   },
 
   activeFilterText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
   },
 
   safeText: {
-    color: '#13D67A',
+    color: "#13D67A",
   },
 
   mediumText: {
-    color: '#FFB800',
+    color: "#FFB800",
   },
 
   highText: {
-    color: '#FF2F68',
+    color: "#FF2F68",
   },
 
   /* ================= MESSAGE LIST ================= */
 
   messageList: {
-    width: '100%',
+    width: "100%",
   },
 
   card: {
-    width: '100%',
+    width: "100%",
 
-    backgroundColor: '#0D1B4D',
+    backgroundColor: "#0D1B4D",
 
     borderWidth: 1,
-    borderColor: '#1B3475',
+    borderColor: "#1B3475",
     borderRadius: 18,
 
     padding: 15,
@@ -536,16 +475,16 @@ const styles = StyleSheet.create({
   /* ================= CARD HEADER ================= */
 
   cardHeader: {
-    flexDirection: 'row',
+    flexDirection: "row",
 
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    justifyContent: "space-between",
+    alignItems: "flex-start",
   },
 
   senderSection: {
     flex: 1,
 
-    flexDirection: 'row',
+    flexDirection: "row",
 
     paddingRight: 10,
   },
@@ -559,8 +498,8 @@ const styles = StyleSheet.create({
     borderRadius: 19,
     borderWidth: 1,
 
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
 
     marginRight: 11,
   },
@@ -576,14 +515,14 @@ const styles = StyleSheet.create({
   },
 
   sender: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
 
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 
   time: {
-    color: '#7C89AD',
+    color: "#7C89AD",
 
     fontSize: 11,
 
@@ -593,9 +532,9 @@ const styles = StyleSheet.create({
   /* ================= RISK BADGE ================= */
 
   riskBadge: {
-    flexDirection: 'row',
+    flexDirection: "row",
 
-    alignItems: 'center',
+    alignItems: "center",
 
     borderWidth: 1,
     borderRadius: 20,
@@ -615,13 +554,13 @@ const styles = StyleSheet.create({
 
   riskBadgeText: {
     fontSize: 10,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 
   /* ================= MESSAGE ================= */
 
   messageText: {
-    color: '#AAB4D2',
+    color: "#AAB4D2",
 
     fontSize: 13,
     lineHeight: 19,
@@ -632,9 +571,9 @@ const styles = StyleSheet.create({
   /* ================= SCORE ================= */
 
   cardBottom: {
-    flexDirection: 'row',
+    flexDirection: "row",
 
-    alignItems: 'center',
+    alignItems: "center",
 
     marginTop: 13,
   },
@@ -646,22 +585,22 @@ const styles = StyleSheet.create({
 
     borderRadius: 10,
 
-    backgroundColor: '#13213D',
+    backgroundColor: "#13213D",
 
-    overflow: 'hidden',
+    overflow: "hidden",
 
     marginRight: 18,
   },
 
   progressFill: {
-    height: '100%',
+    height: "100%",
 
     borderRadius: 10,
   },
 
   score: {
     fontSize: 11,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 
   /* ================= EMPTY STATE ================= */
@@ -669,11 +608,11 @@ const styles = StyleSheet.create({
   emptyContainer: {
     paddingVertical: 50,
 
-    alignItems: 'center',
+    alignItems: "center",
   },
 
   emptyIcon: {
-    color: '#566589',
+    color: "#566589",
 
     fontSize: 36,
 
@@ -681,14 +620,14 @@ const styles = StyleSheet.create({
   },
 
   emptyTitle: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
 
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 
   emptyText: {
-    color: '#7C89AD',
+    color: "#7C89AD",
 
     fontSize: 13,
 
@@ -698,9 +637,9 @@ const styles = StyleSheet.create({
   /* ================= HINT ================= */
 
   tapHint: {
-    color: '#6F7A99',
+    color: "#6F7A99",
 
-    textAlign: 'center',
+    textAlign: "center",
 
     fontSize: 11,
 

@@ -1,30 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { ClassifiedSmsMessage, SmsMessage } from "../types/message.type";
 
-export type SmsMessage = {
-  id: string;
-  body: string;
-  date: number;
-  read: boolean;
-  sender: string;
-};
-
-export type SmsPredictionResult = {
-  label: "normal" | "promo" | "smish";
-  cleanedText: string;
-  dangerScore: number;
-  confidence: number;
-  probabilities: {
-    normal: number;
-    promo: number;
-    smish: number;
-  };
-};
-
-export type ClassifiedSmsMessage = SmsMessage & {
-  mlResult: SmsPredictionResult;
-};
 
 type SmsStore = {
   rawMessages: SmsMessage[];
@@ -63,14 +41,15 @@ export const useSmsStore = create<SmsStore>()(
     (set) => ({
       rawMessages: [],
       classifiedMessages: [],
+      alertItems: [],
 
       setRawMessages: (messages) => {
         set({ rawMessages: messages });
       },
-
       setClassifiedMessages: (messages) => {
         set({ classifiedMessages: messages });
       },
+
 
       appendRawMessages: (messages) => {
         set((state) => ({
@@ -86,7 +65,6 @@ export const useSmsStore = create<SmsStore>()(
           ),
         }));
       },
-
       clearMessages: () => {
         set({
           rawMessages: [],
